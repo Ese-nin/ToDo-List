@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TodoList, {TaskType} from './TodoList';
+import TodoList, {TaskType} from './TodoList/TodoList';
 
 //BLL:
 const todoListTitle_1: string = "What to learn";
@@ -14,7 +14,7 @@ const tasks_1: Array<TaskType> = [
 const tasks_2: Array<TaskType> = [
     {id: 1, title: "Python", isDone: false},
     {id: 2, title: "Java", isDone: false},
-    {id: 3, title: "Node.js", isDone: false}
+    {id: 3, title: "NodeJS", isDone: false}
 ];
 
 
