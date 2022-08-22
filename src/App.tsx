@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TodoList, {TaskType} from './TodoList/TodoList';
+import TodoList, {TaskType} from './components/TodoList/TodoList';
 
 //BLL:
 const todoListTitle_1: string = "What to learn";
@@ -9,7 +9,8 @@ const todoListTitle_2: string = "What to learn tomorrow";
 const tasks_1: Array<TaskType> = [
     {id: 1, title: "HTML", isDone: true},
     {id: 2, title: "CSS", isDone: false},
-    {id: 3, title: "JS", isDone: true}
+    {id: 3, title: "JS", isDone: true},
+    {id: 4, title: "React", isDone: false}
 ];
 const tasks_2: Array<TaskType> = [
     {id: 1, title: "Python", isDone: false},
