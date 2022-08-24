@@ -1,48 +1,43 @@
 import React, {useState} from 'react';
 import './App.css';
-import TodoList, {TasksType} from "./components/TodoList/TodoList";
+import TodoList, {TaskType} from "./components/TodoList/TodoList";
 
-export type FilterValuesType = "All" | "Active" | "Completed"
+export type FilterValueType = "All" | "Active" | "Completed"
 
-//BLL:
-const todoListTitle = "What to learn"
-
-
-//GUI:
 const App = () => {
-    const [tasks, setTasks] = useState<Array<TasksType>>([
+
+    const [tasks, setTasks] = useState<Array<TaskType>>([
         {id: 1, title: "HTML", isDone: true},
         {id: 2, title: "CSS", isDone: true},
         {id: 3, title: "JS", isDone: false},
         {id: 4, title: "React", isDone: false}
     ])
-    const [filter, setFilter] = useState<FilterValuesType>("All")
 
-    const removeTask = (id: number) => {
-        let currentTasks = tasks.filter(t => t.id !== id)
-        setTasks(currentTasks)
-    }
+    const [filter, setFilter] = useState<FilterValueType>("All")
 
-    const changeFilter = (value: FilterValuesType) => {
+    const changeFilter = (value: FilterValueType) => {
         setFilter(value)
     }
 
-    let tasksForTodoList = tasks;
+
+    let selectedTasks = tasks;
     if (filter === "Active") {
-        tasksForTodoList = tasks.filter((t) => t.isDone === false)
+        selectedTasks = tasks.filter(t => t.isDone === false)
     }
     if (filter === "Completed") {
-        tasksForTodoList = tasks.filter((t) => t.isDone === true)
+        selectedTasks = tasks.filter(t => t.isDone === true)
     }
 
+    const removeTask = (id: number) => {
+        let filteredTasks = tasks.filter(t => t.id !== id)
+        setTasks(filteredTasks)
+    }
 
     return (
-        <div>
-            <TodoList title={todoListTitle}
-                      tasks={tasksForTodoList}
-                      removeTask={removeTask}
-                      changeFilter={changeFilter}/>
-        </div>
+        <TodoList title={"What to learn"}
+                  tasks={selectedTasks}
+                  removeTask={removeTask}
+                  changeFilter={changeFilter}/>
     );
 };
 

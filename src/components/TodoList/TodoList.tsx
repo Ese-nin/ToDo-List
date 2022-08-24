@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from "../Button/Button";
-import {FilterValuesType} from "../../App";
+import {FilterValueType} from "../../App";
 
-export type TasksType = {
+export type TaskType = {
     id: number
     title: string
     isDone: boolean
@@ -10,9 +10,9 @@ export type TasksType = {
 
 type TodoListPropsType = {
     title: string
-    tasks: Array<TasksType>
+    tasks: Array<TaskType>
     removeTask: (id: number) => void
-    changeFilter: (value: FilterValuesType) =>void
+    changeFilter: (value: FilterValueType) => void
 }
 
 const TodoList = (props: TodoListPropsType) => {
@@ -20,24 +20,23 @@ const TodoList = (props: TodoListPropsType) => {
         <div>
             <h3>{props.title}</h3>
             <input type="text"/>
-            <Button title={"+"} callBack={() => {
-            }}/>
-            <div>
-                <Button title={"All"} callBack={()=>props.changeFilter("All")}/>
-                <Button title={"Active"} callBack={()=>props.changeFilter("Active")}/>
-                <Button title={"Completed"} callBack={()=>props.changeFilter("Completed")}/>
+            <Button name={"+"} callBack={()=>{}}/>
+            <div style={{marginLeft: "15px"}}>
+                <Button name={"All"} callBack={()=>props.changeFilter("All")}/>
+                <Button name={"Active"} callBack={()=>props.changeFilter("Active")}/>
+                <Button name={"Completed"} callBack={()=>props.changeFilter("Completed")}/>
             </div>
-            <ol>
+            <ul>
                 {props.tasks.map((t, index) => {
                     return (
                         <li key={t.id}>
                             <input type="checkbox" checked={t.isDone}/>
                             <span>{t.title}</span>
-                            <Button title={"del"} callBack={()=>props.removeTask(t.id)}/>
+                            <Button name={"del"} callBack={()=>props.removeTask(t.id)}/>
                         </li>
                     )
                 })}
-            </ol>
+            </ul>
         </div>
     );
 };
