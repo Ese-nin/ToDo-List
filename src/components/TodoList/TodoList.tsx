@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from "../Button/Button";
-import {FilterValueType} from "../../App";
+import {TasksValueType} from "../../App";
 
-export type TasksProps = {
+export type TaskType = {
     id: number
     title: string
     isDone: boolean
@@ -10,33 +10,33 @@ export type TasksProps = {
 
 type TodoListPropsType = {
     title: string
-    tasks: Array<TasksProps>
-    removeTasks: (id: number) => void
-    changeFilter: (value: FilterValueType) => void
+    tasks: Array<TaskType>
+    removeTask: (id: number) => void
+    filteredTasks: (value: TasksValueType) => void
 }
 
 const TodoList = (props: TodoListPropsType) => {
     return (
         <div>
             <h3>{props.title}</h3>
-            <input type="text"/>
-            <Button name="+" callBack={()=>{}}/>
-            <div>
-                <Button name="All" callBack={()=>props.changeFilter("All")}/>
-                <Button name="Active" callBack={()=>props.changeFilter("Active")}/>
-                <Button name="Completed" callBack={()=>props.changeFilter("Completed")}/>
+            <input/>
+            <Button name="+" callBack={() => {}}/>
+            <div style={{marginLeft: "20px"}}>
+                <Button name="All" callBack={() => props.filteredTasks("all")}/>
+                <Button name="Active" callBack={() => props.filteredTasks("active")}/>
+                <Button name="Completed" callBack={() => props.filteredTasks("completed")}/>
             </div>
-            <ol>
-                {props.tasks.map((t, index)=>{
+            <ul>
+                {props.tasks.map((t, index) => {
                     return (
                         <li key={t.id}>
                             <input type="checkbox" checked={t.isDone}/>
-                            <span> {t.title} </span>
-                            <Button name="del" callBack={()=>props.removeTasks(t.id)}/>
+                            <span>{t.title}</span>
+                            <Button name="del" callBack={()=>props.removeTask(t.id)}/>
                         </li>
                     )
                 })}
-            </ol>
+            </ul>
         </div>
     );
 };
