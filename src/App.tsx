@@ -12,13 +12,26 @@ const App = () => {
         {id: v1(), title: "HTML", isDone: true},
         {id: v1(), title: "CSS", isDone: true},
         {id: v1(), title: "JS", isDone: false},
-        {id: v1(), title: "React", isDone: false}
+        {id: v1(), title: "React", isDone: false},
+        {id: v1(), title: "NodeJS", isDone: false}
     ])
 
     const [filter, setFilter] = useState<TasksValueType>("all")
 
     const filteredTasks = (value: TasksValueType) => {
         setFilter(value)
+    }
+
+    const addTask = (title: string) => {
+        let newTask = {
+            id: v1(), title: title, isDone: false
+        }
+        setTasks([newTask, ...tasks]);
+    }
+
+    const removeTask = (id: string) => {
+        let resultTasks = tasks.filter(t => t.id !== id)
+        setTasks(resultTasks);
     }
 
     let tasksForTodoList = tasks;
@@ -29,17 +42,13 @@ const App = () => {
         tasksForTodoList = tasks.filter(t => t.isDone)
     }
 
-    const removeTask = (id: string) => {
-        let resultTasks = tasks.filter(t => t.id !== id)
-        setTasks(resultTasks)
-    }
-
     return (
         <div>
             <TodoList title={title}
                       tasks={tasksForTodoList}
                       removeTask={removeTask}
-                      filteredTasks={filteredTasks}/>
+                      filteredTasks={filteredTasks}
+                      addTask={addTask}/>
         </div>
     );
 };
