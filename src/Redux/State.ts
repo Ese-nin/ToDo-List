@@ -1,25 +1,23 @@
 import {v1} from "uuid";
 
-type TaskType = {
+export type taskType = {
     id: string
     title: string
     isDone: boolean
 }
 
-export type TasksType = Array<TaskType>
-
 export type RootStateType = {
-    tasks: TasksType
+    tasks: Array<taskType>
+    title: string
 }
 
-const state = {
+export const state = {
     tasks: [
-        {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: false},
+        {id: v1(), title: "HTML&CSS", isDone: true},
+        {id: v1(), title: "JS", isDone: true},
         {id: v1(), title: "React", isDone: false},
-        {id: v1(), title: "NodeJS", isDone: false}
-    ]
+        {id: v1(), title: "NodeJS", isDone: false},
+        {id: v1(), title: "Angular", isDone: true}
+    ],
+    title: "Вот ту лёрн тудой"
 }
-
-export default state;
