@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import TodoList from "./Components/TodoList";
 import {RootStateType, taskType} from "./Redux/State";
 import {v1} from "uuid";
+import "./App.css";
 
 type AppPropsType = {
     state: RootStateType
@@ -22,6 +23,11 @@ const App = (props: AppPropsType) => {
         setTasks([newTask, ...tasks])
     }
 
+    const changeStatus = (id: string, isDone: boolean) => {
+        setTasks(tasks.map(t => t.id !== id ? t : {...t, isDone}))
+    } // если своство объекта и имя аргумента совпадают,
+    // можно сократить (isDone: isDone -> isDone)
+
     const tasksForTodoList = (value: FilterValuesType) => {
         setFilter(value)
     }
@@ -39,7 +45,9 @@ const App = (props: AppPropsType) => {
                   tasks={filteredTasks}
                   removeTask={removeTask}
                   tasksForTodoList={tasksForTodoList}
-                  addTask={addTask}/>
+                  addTask={addTask}
+                  changeStatus={changeStatus}
+                  filter={filter}/>
     );
 };
 
