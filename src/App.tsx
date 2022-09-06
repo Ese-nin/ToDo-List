@@ -2,50 +2,51 @@ import React, {useState} from 'react';
 import TodoList from "./Components/TodoList";
 import {RootStateType, taskType} from "./Redux/State";
 import {v1} from "uuid";
-import "./App.css";
+import "./App.css"
+
+export type FilterValuesType = "all" | "active" | "completed"
 
 type AppPropsType = {
     state: RootStateType
 }
-export type FilterValuesType = "all" | "active" | "completed"
 
 const App = (props: AppPropsType) => {
-    const [tasks, setTasks] = useState<Array<taskType>>(props.state.tasks);
+
+    const [tasks, setTasks] = useState<Array<taskType>>(props.state.tasks)
     const [filter, setFilter] = useState<FilterValuesType>("all")
 
-    const removeTask = (id: string) => {
-        const resultTasks = tasks.filter(t => t.id !== id)
-        setTasks(resultTasks)
-    }
-
     const addTask = (value: string) => {
-        const newTask = {id: v1(), title: value, isDone: false};
+        let newTask = {id: v1(), title: value, isDone: false}
         setTasks([newTask, ...tasks])
     }
 
-    const changeStatus = (id: string, isDone: boolean) => {
-        setTasks(tasks.map(t => t.id !== id ? t : {...t, isDone}))
-    } // если своство объекта и имя аргумента совпадают,
-    // можно сократить (isDone: isDone -> isDone)
-
-    const tasksForTodoList = (value: FilterValuesType) => {
-        setFilter(value)
+    const removeTask = (taskID: string) => {
+        const selectedTasks = tasks.filter(t => t.id !== taskID)
+        setTasks(selectedTasks)
     }
 
-    let filteredTasks = tasks;
+    let filteredTasks = tasks
     if (filter === "active") {
-        filteredTasks = tasks.filter(t => !t.isDone)
+        filteredTasks = tasks.filter(t => t.isDone === false)
     }
     if (filter === "completed") {
-        filteredTasks = tasks.filter(t => t.isDone)
+        filteredTasks = tasks.filter(t => t.isDone === true)
+    }
+
+    const tasksForTodoList = (filter: FilterValuesType) => {
+        setFilter(filter);
+    }
+
+    const changeStatus = (taskID: string, isDone: boolean) => {
+        setTasks(tasks.map(t => t.id !== taskID ? t : {...t, isDone: isDone}))
     }
 
     return (
-        <TodoList title={props.state.title}
-                  tasks={filteredTasks}
+        <TodoList tasks={filteredTasks}
+                  title={props.state.title}
+                  addTask={addTask}
                   removeTask={removeTask}
                   tasksForTodoList={tasksForTodoList}
-                  addTask={addTask}
                   changeStatus={changeStatus}
                   filter={filter}/>
     );
