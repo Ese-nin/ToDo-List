@@ -4,7 +4,7 @@
 }
 
 .App > div {
-  margin-right: 20px;
+  margin-right: 50px;
 }
 
 .error {
@@ -15,14 +15,8 @@
   color: red;
 }
 
-.error-button {
-  background-color: rgba(255, 0, 0, .3);
-}
-
 .active-filter {
   background-color: aquamarine;
-  border: 1px solid grey;
-  border-radius: 5px;
 }
 
 .is-done {
