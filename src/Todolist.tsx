@@ -1,7 +1,8 @@
-import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 import {AddItem} from "./components/AddItem";
 import {EditableSpan} from "./components/EditableSpan";
+import {Button} from "@mui/material";
 
 type TaskType = {
     id: string
@@ -80,7 +81,8 @@ export const TodoList = (props: TodoListPropsType) => {
         <div>
             <h3>
                 <EditableSpan callback={(currentTitle)=>editTodoTitle(currentTitle)} title={title}/>
-                <button onClick={removeTodoButtonHandler}>x</button>
+                {/*<button onClick={removeTodoButtonHandler}>x</button>*/}
+                <Button variant="contained" onClick={removeTodoButtonHandler}>x</Button>
             </h3>
             <AddItem
                 addItem={(value) => addItemHandler(value)}/>
