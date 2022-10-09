@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@mui/material";
+import Fingerprint from "@mui/icons-material/Fingerprint";
 
 type AddItemPropsType = {
     callback: (title: string) => void
@@ -9,7 +11,7 @@ export const AddItem = (props: AddItemPropsType) => {
     const [title, setTitle] = useState('')
     const [error, setError] = useState(false)
 
-    const errorSpan = error ? <div className='error-message'>Field is empty</div> : ''
+    const errorSpan = error ? <span className='error-message'>Field is empty</span> : ''
 
     const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (error) setError(false)
@@ -29,12 +31,17 @@ export const AddItem = (props: AddItemPropsType) => {
 
     return (
         <div>
-            <input value={title}
-                   className={error ? 'error' : ''}
-                   onChange={onChangeInputHandler}
-                   onKeyDown={onEnterAddItem}/>
-            <button onClick={addItemHandler}>+</button>
-            {errorSpan}
+            <TextField
+                label={error ? errorSpan : 'Enter new title'}
+                value={title}
+                className={error ? 'error' : ''}
+                onChange={onChangeInputHandler}
+                onKeyDown={onEnterAddItem}
+                variant="filled"
+                size={'small'}/>
+            <IconButton onClick={addItemHandler} aria-label="fingerprint" color="success">
+                <Fingerprint />
+            </IconButton>
         </div>
     );
 };
