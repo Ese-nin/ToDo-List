@@ -1,6 +1,7 @@
 .App {
   padding: 30px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .App > div {
@@ -21,12 +22,4 @@
 
 .is-done {
   opacity: 0.5;
-}
-
-input {
-  outline: none;
-}
-
-ul {
-  list-style-type: none;
 }
