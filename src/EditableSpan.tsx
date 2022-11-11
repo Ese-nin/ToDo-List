@@ -21,7 +21,6 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setCurrentTitle(e.currentTarget.value)
-
     }
 
     return (
