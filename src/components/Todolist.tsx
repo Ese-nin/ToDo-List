@@ -1,8 +1,10 @@
 import React from 'react';
-import {FilterValuesType} from './App';
 import AddItem from "./AddItem";
 import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
+import {Button, IconButton} from "@mui/material";
+import {Fingerprint} from "@mui/icons-material";
+import {FilterValuesType} from "./TodoListsList";
 
 export type TaskType = {
     id: string
@@ -46,19 +48,30 @@ export function Todolist(props: PropsType) {
     return <div>
         <h3>
             <EditableSpan title={props.title} callback={(title) => changeTodoTitle(title)}/>
-            <button onClick={removeTodolist}>x</button>
+            <IconButton onClick={removeTodolist} aria-label="fingerprint" color="secondary">
+                <Fingerprint/>
+            </IconButton>
         </h3>
         <AddItem callback={addTask}/>
-        <div>
-            <button className={props.filter === 'all' ? "active-filter" : ""}
-                    onClick={onAllClickHandler}>All
-            </button>
-            <button className={props.filter === 'active' ? "active-filter" : ""}
-                    onClick={onActiveClickHandler}>Active
-            </button>
-            <button className={props.filter === 'completed' ? "active-filter" : ""}
-                    onClick={onCompletedClickHandler}>Completed
-            </button>
+        <div style={{marginTop: '15px'}}>
+            <Button onClick={onAllClickHandler}
+                    variant={props.filter === 'all' ? "contained" : "outlined"}
+                    color="success"
+                    size={'small'}>
+                All
+            </Button>
+            <Button onClick={onActiveClickHandler}
+                variant={props.filter === 'active' ? "contained" : "outlined"}
+                    color="success"
+                    size={'small'}>
+                Active
+            </Button>
+            <Button onClick={onCompletedClickHandler}
+                    variant={props.filter === 'completed' ? "contained" : "outlined"}
+                    color="success"
+                    size={'small'}>
+                Completed
+            </Button>
         </div>
         <ul>
             {

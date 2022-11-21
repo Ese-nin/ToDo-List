@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@mui/material";
+import Fingerprint from '@mui/icons-material/Fingerprint';
 
 type AddItemPropsType = {
     callback: (title: string) => void
@@ -31,13 +33,15 @@ const AddItem = (props: AddItemPropsType) => {
 
     return (
         <div>
-            <input value={title}
-                   onChange={onChangeHandler}
-                   onKeyPress={onKeyPressHandler}
-                   className={error ? "error" : ""}
-            />
-            <button onClick={addItem}>+</button>
-            {error && <div className="error-message">{error}</div>}
+            <TextField value={title}
+                       error={!!error}
+                       onChange={onChangeHandler}
+                       onKeyPress={onKeyPressHandler}
+                       label={error ? error : "Title"}
+                       variant="standard" />
+            <IconButton onClick={addItem} aria-label="fingerprint" color="success">
+                <Fingerprint />
+            </IconButton>
         </div>
     );
 };

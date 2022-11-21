@@ -1,5 +1,7 @@
 import React, {ChangeEvent} from "react";
 import {EditableSpan} from "./EditableSpan";
+import {Checkbox, IconButton} from "@mui/material";
+import {Fingerprint} from "@mui/icons-material";
 
 type TaskPropsType = {
     todoListID: string
@@ -19,9 +21,11 @@ export const Task = (props: TaskPropsType) => {
         props.changeTaskStatus(props.taskID, newIsDoneValue, props.todoListID);
     }
 
-    return <li className={props.isDone ? "is-done" : ""}>
-        <input type="checkbox" onChange={onChangeHandler} checked={props.isDone}/>
+    return <li>
+        <Checkbox onChange={onChangeHandler} checked={props.isDone} />
         <EditableSpan title={props.title} callback={(title)=>props.changeTaskTitle(props.taskID, title)}/>
-        <button onClick={onClickHandler}>x</button>
+        <IconButton onClick={onClickHandler} aria-label="fingerprint" color="secondary">
+            <Fingerprint />
+        </IconButton>
     </li>
 }
