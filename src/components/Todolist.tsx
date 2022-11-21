@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import AddItem from "./AddItem";
 import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
@@ -26,24 +26,24 @@ type PropsType = {
     changeTodoListTitle: (todoListID: string, title: string) => void
 }
 
-export function Todolist(props: PropsType) {
+export const Todolist = React.memo((props: PropsType) => {
     const removeTodolist = () => props.removeTodolist(props.id)
 
-    const onAllClickHandler = () => props.changeFilter("all", props.id);
-    const onActiveClickHandler = () => props.changeFilter("active", props.id);
-    const onCompletedClickHandler = () => props.changeFilter("completed", props.id);
+    const onAllClickHandler = useCallback(() => props.changeFilter("all", props.id), [props.changeFilter, props.id]);
+    const onActiveClickHandler = useCallback(() => props.changeFilter("active", props.id), [props.changeFilter, props.id]);
+    const onCompletedClickHandler = useCallback(() => props.changeFilter("completed", props.id), [props.changeFilter, props.id]);
 
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
-    }
+    }, [props.addTask, props.id])
 
-    const changeTodoTitle = (title: string) => {
+    const changeTodoTitle = useCallback((title: string) => {
         props.changeTodoListTitle(props.id, title)
-    }
+    }, [props.changeTodoListTitle, props.id])
 
-    const changeTaskTitle = (taskID: string, title: string) => {
+    const changeTaskTitle = useCallback((taskID: string, title: string) => {
         props.changeTaskTitle(props.id, taskID, title)
-    }
+    }, [props.changeTaskTitle, props.id])
 
     return <div>
         <h3>
@@ -90,4 +90,4 @@ export function Todolist(props: PropsType) {
         </ul>
 
     </div>
-}
+})

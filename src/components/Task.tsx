@@ -13,7 +13,7 @@ type TaskPropsType = {
     changeTaskTitle: (taskID: string, title: string) => void
 }
 
-export const Task = (props: TaskPropsType) => {
+export const Task = React.memo((props: TaskPropsType) => {
 
     const onClickHandler = () => props.removeTask(props.taskID, props.todoListID)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,4 +28,4 @@ export const Task = (props: TaskPropsType) => {
             <Fingerprint />
         </IconButton>
     </li>
-}
+})

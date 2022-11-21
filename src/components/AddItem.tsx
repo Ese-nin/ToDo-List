@@ -6,7 +6,7 @@ type AddItemPropsType = {
     callback: (title: string) => void
 }
 
-const AddItem = (props: AddItemPropsType) => {
+const AddItem = React.memo((props: AddItemPropsType) => {
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
@@ -44,6 +44,6 @@ const AddItem = (props: AddItemPropsType) => {
             </IconButton>
         </div>
     );
-};
+});
 
 export default AddItem;
