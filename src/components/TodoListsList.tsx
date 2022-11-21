@@ -80,6 +80,10 @@ export const TodoListsList = () => {
                     todolists.map(tl => {
                         let allTodolistTasks = tasks[tl.id];
 
+                        if (tl.filter === 'active') allTodolistTasks = tasks[tl.id].filter(t => !t.isDone)
+                        if (tl.filter === 'completed') allTodolistTasks = tasks[tl.id].filter(t => t.isDone)
+
+
                         return <Grid item key={tl.id}>
                             <Paper style={{padding: '10px'}}>
                                 <Todolist
