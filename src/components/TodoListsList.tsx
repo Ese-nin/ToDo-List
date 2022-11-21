@@ -20,7 +20,7 @@ export type TodolistType = {
 }
 
 export type TasksStateType = {
-    [key: string]: Array<TaskType>
+    [key: string]: TaskType[]
 }
 
 export const TodoListsList = () => {
@@ -78,10 +78,7 @@ export const TodoListsList = () => {
             <Grid container spacing={3}>
                 {
                     todolists.map(tl => {
-                        let allTodolistTasks = tasks[tl.id];
 
-                        if (tl.filter === 'active') allTodolistTasks = tasks[tl.id].filter(t => !t.isDone)
-                        if (tl.filter === 'completed') allTodolistTasks = tasks[tl.id].filter(t => t.isDone)
 
 
                         return <Grid item key={tl.id}>
@@ -89,7 +86,7 @@ export const TodoListsList = () => {
                                 <Todolist
                                     id={tl.id}
                                     title={tl.title}
-                                    tasks={allTodolistTasks}
+                                    tasks={tasks}
                                     removeTask={removeTask}
                                     changeFilter={changeFilter}
                                     addTask={addTask}

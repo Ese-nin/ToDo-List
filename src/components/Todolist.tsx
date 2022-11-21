@@ -4,7 +4,7 @@ import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
 import {Button, IconButton} from "@mui/material";
 import {Fingerprint} from "@mui/icons-material";
-import {FilterValuesType} from "./TodoListsList";
+import {FilterValuesType, TasksStateType} from "./TodoListsList";
 
 export type TaskType = {
     id: string
@@ -15,7 +15,7 @@ export type TaskType = {
 type PropsType = {
     id: string
     title: string
-    tasks: Array<TaskType>
+    tasks: TasksStateType
     removeTask: (taskId: string, todolistId: string) => void
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
@@ -45,6 +45,10 @@ export const Todolist = React.memo((props: PropsType) => {
         props.changeTaskTitle(props.id, taskID, title)
     }, [props.changeTaskTitle, props.id])
 
+    let tasks = props.tasks[props.id]
+    if (props.filter === 'active') tasks = tasks.filter(t => !t.isDone)
+    if (props.filter === 'completed') tasks = tasks.filter(t => t.isDone)
+
     return <div>
         <h3>
             <EditableSpan title={props.title} callback={(title) => changeTodoTitle(title)}/>
@@ -61,7 +65,7 @@ export const Todolist = React.memo((props: PropsType) => {
                 All
             </Button>
             <Button onClick={onActiveClickHandler}
-                variant={props.filter === 'active' ? "contained" : "outlined"}
+                    variant={props.filter === 'active' ? "contained" : "outlined"}
                     color="success"
                     size={'small'}>
                 Active
@@ -75,7 +79,7 @@ export const Todolist = React.memo((props: PropsType) => {
         </div>
         <ul>
             {
-                props.tasks.map(t => {
+                tasks.map(t => {
                     return <Task
                         key={t.id}
                         todoListID={props.id}
