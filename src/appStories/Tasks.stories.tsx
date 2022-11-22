@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {DomainModelTaskType, taskAPI} from "../api/task-api";
+import {taskAPI} from "../api/task-api";
+import {UpdateModelTaskType} from "../state/tasks-reducer";
 
 export default {
     title: 'tasks'
@@ -79,7 +80,7 @@ export const ChangeTask = () => {
 
     const changeTask = (todolistID: string, taskID: string, title: string) => {
 
-        const model: DomainModelTaskType = {
+        const model: UpdateModelTaskType = {
             title,
             completed: false,
             deadline: '',

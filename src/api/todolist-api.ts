@@ -10,11 +10,11 @@ const instance = axios.create({
 
 export const todolistAPI = {
     getTodolists() {
-        return instance.get<TodolistType[]>('todo-lists')
+        return instance.get<TodolistDomainType[]>('todo-lists')
             .then(res=>res.data)
     },
     createTodolist(title: string) {
-        return instance.post<ResponseType<{item: TodolistType}>>(`todo-lists`, {title})
+        return instance.post<ResponseType<{item: TodolistDomainType}>>(`todo-lists`, {title})
             .then(res=>res.data)
     },
     deleteTodolist(todolistID: string) {
@@ -27,7 +27,7 @@ export const todolistAPI = {
     }
 }
 
-type TodolistType = {
+export type TodolistDomainType = {
     id: string
     addedDate: string
     order: number
