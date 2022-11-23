@@ -1,9 +1,8 @@
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodoActionType} from "./todolists-reducer";
 import {taskAPI, TaskType} from "../api/task-api";
-import {Dispatch} from "redux";
-import {AppRootStateType} from "../store/store";
+import {AppRootStateType, AppThunk} from "../store/store";
 
-export const tasksReducer = (state: TasksStateType = {}, action: ActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = {}, action: TasksActionsType): TasksStateType => {
     switch (action.type) {
         case "SET_TODO": {
             let copyState = {...state};
@@ -62,26 +61,26 @@ export const updateTaskAC = (task: TaskType) => {
 
 
 // thunk
-export const SetTasksTC = (todolistID: string) => (dispatch: Dispatch) => {
+export const SetTasksTC = (todolistID: string): AppThunk => (dispatch) => {
     taskAPI.getTasks(todolistID)
         .then((data) => {
             dispatch(setTasksAC(todolistID, data.items))
         })
 }
-export const CreateTasksTC = (todolistID: string, title: string) => (dispatch: Dispatch) => {
+export const CreateTasksTC = (todolistID: string, title: string): AppThunk => (dispatch) => {
     taskAPI.createTask(todolistID, title)
         .then((data) => {
             dispatch(addTaskAC(data.data.item))
         })
 }
-export const DeleteTasksTC = (todolistID: string, taskID: string) => (dispatch: Dispatch) => {
+export const DeleteTasksTC = (todolistID: string, taskID: string): AppThunk => (dispatch) => {
     taskAPI.deleteTask(todolistID, taskID)
         .then(() => {
             dispatch(removeTaskAC(todolistID, taskID))
         })
 }
-export const UpdateTaskTC = (todolistID: string, taskID: string, domainModel: UpdateModelTaskType) =>
-    (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const UpdateTaskTC = (todolistID: string, taskID: string, domainModel: UpdateModelTaskType): AppThunk =>
+    (dispatch, getState: () => AppRootStateType) => {
         const task = getState().tasks[todolistID].find(t => t.id === taskID)
 
         if (task) {
@@ -109,7 +108,7 @@ export type AddTaskActionType = ReturnType<typeof addTaskAC>
 export type SetTasksACType = ReturnType<typeof setTasksAC>
 export type UpdateTasksACType = ReturnType<typeof updateTaskAC>
 
-type ActionsType = RemoveTaskActionType
+export type TasksActionsType = RemoveTaskActionType
     | AddTaskActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
