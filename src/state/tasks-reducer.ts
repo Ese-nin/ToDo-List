@@ -20,14 +20,14 @@ export const tasksReducer = (state: TasksStateType = {}, action: ActionsType): T
         case 'REMOVE-TASK':
             return {
                 ...state,
-                [action.todolistId]: state[action.todolistId].filter(el => el.id !== action.taskID)
+                [action.todolistID]: state[action.todolistID].filter(el => el.id !== action.taskID)
             }
         case 'ADD-TASK':
             return {
                 ...state,
                 [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]
             }
-        case 'CHANGE_TASK':
+        case 'UPDATE_TASK':
             return {
                 ...state,
                 [action.task.todoListId]: state[action.task.todoListId].map(t => t.id === action.task.id
@@ -50,14 +50,14 @@ export const tasksReducer = (state: TasksStateType = {}, action: ActionsType): T
 export const setTasksAC = (todolistID: string, tasks: TaskType[]) => {
     return {type: 'SET-TASKS', todolistID, tasks} as const
 }
-export const removeTaskAC = (todolistId: string, taskID: string) => {
-    return {type: 'REMOVE-TASK', todolistId, taskID} as const
+export const removeTaskAC = (todolistID: string, taskID: string) => {
+    return {type: 'REMOVE-TASK', todolistID, taskID} as const
 }
 export const addTaskAC = (task: TaskType) => {
     return {type: 'ADD-TASK', task} as const
 }
 export const updateTaskAC = (task: TaskType) => {
-    return {type: 'CHANGE_TASK', task} as const
+    return {type: 'UPDATE_TASK', task} as const
 }
 
 
