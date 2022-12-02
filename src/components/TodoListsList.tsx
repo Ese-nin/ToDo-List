@@ -14,9 +14,11 @@ import {
 } from "../state/todolists-reducer";
 import {TodolistDomainType} from "../api/todolist-api";
 import {TaskStatuses} from "../api/task-api";
+import {AppStatusType} from "../state/app-reducer";
 
 export type TodolistType = TodolistDomainType & {
     filter: FilterValuesType
+    entityStatus: AppStatusType
 }
 
 export const TodoListsList = () => {
@@ -72,8 +74,6 @@ export const TodoListsList = () => {
                 {
                     todolists.map(tl => {
 
-
-
                         return <Grid item key={tl.id}>
                             <Paper style={{padding: '10px'}}>
                                 <Todolist
@@ -88,6 +88,7 @@ export const TodoListsList = () => {
                                     removeTodolist={removeTodolist}
                                     changeTaskTitle={changeTaskTitle}
                                     changeTodoListTitle={changeTodoListTitle}
+                                    entityStatus={tl.entityStatus}
                                 />
                             </Paper>
                         </Grid>

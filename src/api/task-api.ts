@@ -15,7 +15,7 @@ export const taskAPI = {
             .then(res=>res.data)
     },
     createTask(todolistID: string, title: string) {
-        return instance.post<TaskResponseType<{item: TaskType}>>(`todo-lists/${todolistID}/tasks`, {title})
+        return instance.post<TaskResponseType<{item: TaskDomainType}>>(`todo-lists/${todolistID}/tasks`, {title})
             .then(res=>res.data)
     },
     deleteTask(todolistID: string, taskID: string) {
@@ -23,12 +23,12 @@ export const taskAPI = {
             .then(res=>res.data)
     },
     changeTask(todolistID: string, taskID: string, domainModel: UpdateModelTaskType) {
-        return instance.put<TaskResponseType<{item: TaskType}>>(`todo-lists/${todolistID}/tasks/${taskID}`, domainModel)
+        return instance.put<TaskResponseType<{item: TaskDomainType}>>(`todo-lists/${todolistID}/tasks/${taskID}`, domainModel)
             .then(res=>res.data)
     }
 }
 
-export type TaskType = {
+export type TaskDomainType = {
     description: string
     title: string
     completed: boolean
@@ -42,7 +42,7 @@ export type TaskType = {
     addedDate: string
 }
 type GetTasksResponseType = {
-    items: TaskType[],
+    items: TaskDomainType[],
     totalCount: number,
     error: string
 }

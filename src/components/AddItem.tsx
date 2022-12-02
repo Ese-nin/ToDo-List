@@ -1,9 +1,11 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from "@mui/material";
 import Fingerprint from '@mui/icons-material/Fingerprint';
+import {AppStatusType} from "../state/app-reducer";
 
 type AddItemPropsType = {
     callback: (title: string) => void
+    entityStatus?: AppStatusType
 }
 
 const AddItem = React.memo((props: AddItemPropsType) => {
@@ -26,7 +28,7 @@ const AddItem = React.memo((props: AddItemPropsType) => {
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
-        if (e.charCode === 13) {
+        if (e.key === 'Enter') {
             addItem();
         }
     }
@@ -36,11 +38,15 @@ const AddItem = React.memo((props: AddItemPropsType) => {
             <TextField value={title}
                        error={!!error}
                        onChange={onChangeHandler}
-                       onKeyPress={onKeyPressHandler}
+                       onKeyDown={onKeyPressHandler}
                        label={error ? error : "Title"}
-                       variant="standard" />
-            <IconButton onClick={addItem} aria-label="fingerprint" color="success">
-                <Fingerprint />
+                       variant="standard"
+                       disabled={props.entityStatus === 'loading'}/>
+            <IconButton onClick={addItem}
+                        aria-label="fingerprint"
+                        color="success"
+                        disabled={props.entityStatus === 'loading'}>
+                <Fingerprint/>
             </IconButton>
         </div>
     );

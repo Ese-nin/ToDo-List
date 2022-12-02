@@ -8,6 +8,7 @@ import {SetTasksTC, TasksStateType} from "../state/tasks-reducer";
 import {FilterValuesType} from "../state/todolists-reducer";
 import {TaskStatuses} from "../api/task-api";
 import {useAppDispatch} from "../store/store";
+import {AppStatusType} from "../state/app-reducer";
 
 type PropsType = {
     id: string
@@ -21,6 +22,7 @@ type PropsType = {
     filter: FilterValuesType
     changeTaskTitle: (todoListID: string, taskID: string, title: string) => void
     changeTodoListTitle: (todoListID: string, title: string) => void
+    entityStatus: AppStatusType
 }
 
 export const Todolist = React.memo((props: PropsType) => {
@@ -58,12 +60,12 @@ export const Todolist = React.memo((props: PropsType) => {
 
     return <div>
         <h3>
-            <EditableSpan title={props.title} callback={(title) => changeTodoTitle(title)}/>
-            <IconButton onClick={removeTodolist} aria-label="fingerprint" color="secondary">
+            <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title) => changeTodoTitle(title)}/>
+            <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist} aria-label="fingerprint" color="secondary">
                 <Fingerprint/>
             </IconButton>
         </h3>
-        <AddItem callback={addTask}/>
+        <AddItem entityStatus={props.entityStatus} callback={addTask}/>
         <div style={{marginTop: '15px'}}>
             <Button onClick={onAllClickHandler}
                     variant={props.filter === 'all' ? "contained" : "outlined"}

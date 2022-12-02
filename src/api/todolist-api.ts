@@ -33,8 +33,13 @@ export type TodolistDomainType = {
     order: number
     title: string
 }
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number,
     messages: string[],
     data: T
+}
+
+export enum ResponseCode {
+    SUCCESS = 0,
+    CAPTCHA = 10,
 }

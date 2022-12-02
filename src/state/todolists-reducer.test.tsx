@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    AddTodolistAC,
+    AddTodolistAC, ChangeEntityStatusAC,
     ChangeTodolistFilterAC,
     ChangeTodolistTitleAC, FilterValuesType,
     RemoveTodolistAC, SetTodoAC,
@@ -15,8 +15,8 @@ let todolistId2 = v1();
 
 beforeEach(()=>{
     startState = [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0, entityStatus: "idle"},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0, entityStatus: "idle"}
     ]
 })
 
@@ -83,3 +83,13 @@ test('actual todos should be added', () => {
     expect(endState[0].filter).toBe('all')
     expect(endState[1].filter).toBe('all')
 });
+
+
+test('entityStatus should be changed', () => {
+    const newStatus = 'loading'
+
+    const endState = todolistsReducer(startState, ChangeEntityStatusAC(todolistId2, newStatus))
+
+    expect(endState[1].entityStatus).toBe(newStatus)
+    expect(endState[0].entityStatus).toBe('idle')
+})

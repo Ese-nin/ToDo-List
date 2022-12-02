@@ -1,6 +1,9 @@
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodoActionType} from "./todolists-reducer";
-import {taskAPI, TaskType} from "../api/task-api";
+import {taskAPI, TaskDomainType} from "../api/task-api";
 import {AppRootStateType, AppThunk} from "../store/store";
+import {changeAppStatusAC} from "./app-reducer";
+import {ResponseCode} from "../api/todolist-api";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 export const tasksReducer = (state: TasksStateType = {}, action: TasksActionsType): TasksStateType => {
     switch (action.type) {
@@ -46,41 +49,63 @@ export const tasksReducer = (state: TasksStateType = {}, action: TasksActionsTyp
 }
 
 // actions
-export const setTasksAC = (todolistID: string, tasks: TaskType[]) => {
+export const setTasksAC = (todolistID: string, tasks: TaskDomainType[]) => {
     return {type: 'SET-TASKS', todolistID, tasks} as const
 }
 export const removeTaskAC = (todolistID: string, taskID: string) => {
     return {type: 'REMOVE-TASK', todolistID, taskID} as const
 }
-export const addTaskAC = (task: TaskType) => {
+export const addTaskAC = (task: TaskDomainType) => {
     return {type: 'ADD-TASK', task} as const
 }
-export const updateTaskAC = (task: TaskType) => {
+export const updateTaskAC = (task: TaskDomainType) => {
     return {type: 'UPDATE_TASK', task} as const
 }
 
 
 // thunk
 export const SetTasksTC = (todolistID: string): AppThunk => (dispatch) => {
+    dispatch(changeAppStatusAC('loading'))
     taskAPI.getTasks(todolistID)
         .then((data) => {
             dispatch(setTasksAC(todolistID, data.items))
+            dispatch(changeAppStatusAC('idle'))
+        })
+        .catch((err)=>{
+            handleServerNetworkError(err, dispatch)
         })
 }
 export const CreateTasksTC = (todolistID: string, title: string): AppThunk => (dispatch) => {
+    dispatch(changeAppStatusAC('loading'))
     taskAPI.createTask(todolistID, title)
         .then((data) => {
-            dispatch(addTaskAC(data.data.item))
+            if (data.resultCode === ResponseCode.SUCCESS) {
+                dispatch(addTaskAC(data.data.item))
+            } else {
+                handleServerAppError(data, dispatch)
+            }
+        })
+        .catch((err)=>{
+            handleServerNetworkError(err, dispatch)
         })
 }
 export const DeleteTasksTC = (todolistID: string, taskID: string): AppThunk => (dispatch) => {
+    dispatch(changeAppStatusAC('loading'))
     taskAPI.deleteTask(todolistID, taskID)
-        .then(() => {
-            dispatch(removeTaskAC(todolistID, taskID))
+        .then((data) => {
+            if (data.resultCode === ResponseCode.SUCCESS) {
+                dispatch(removeTaskAC(todolistID, taskID))
+            } else {
+                handleServerAppError(data, dispatch)
+            }
+        })
+        .catch((err)=>{
+            handleServerNetworkError(err, dispatch)
         })
 }
 export const UpdateTaskTC = (todolistID: string, taskID: string, domainModel: UpdateModelTaskType): AppThunk =>
     (dispatch, getState: () => AppRootStateType) => {
+        dispatch(changeAppStatusAC('loading'))
         const task = getState().tasks[todolistID].find(t => t.id === taskID)
 
         if (task) {
@@ -96,7 +121,14 @@ export const UpdateTaskTC = (todolistID: string, taskID: string, domainModel: Up
 
             taskAPI.changeTask(todolistID, taskID, model)
                 .then((data) => {
-                    dispatch(updateTaskAC(data.data.item))
+                    if (data.resultCode === ResponseCode.SUCCESS) {
+                        dispatch(updateTaskAC(data.data.item))
+                    } else {
+                        handleServerAppError(data, dispatch)
+                    }
+                })
+                .catch((err)=>{
+                    handleServerNetworkError(err, dispatch)
                 })
         }
     }
@@ -117,7 +149,7 @@ export type TasksActionsType = RemoveTaskActionType
     | UpdateTasksACType
 
 export type TasksStateType = {
-    [key: string]: TaskType[]
+    [key: string]: TaskDomainType[]
 }
 
 export type UpdateModelTaskType = {
