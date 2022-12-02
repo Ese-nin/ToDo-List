@@ -3,6 +3,7 @@ import {EditableSpan} from "./EditableSpan";
 import {Checkbox, IconButton} from "@mui/material";
 import {Fingerprint} from "@mui/icons-material";
 import {TaskStatuses} from "../api/task-api";
+import {AppStatusType} from "../state/app-reducer";
 
 type TaskPropsType = {
     todoListID: string
@@ -12,6 +13,7 @@ type TaskPropsType = {
     removeTask: (taskId: string, todolistId: string) => void
     changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (taskID: string, title: string) => void
+    entityStatus: AppStatusType
 }
 
 export const Task = React.memo((props: TaskPropsType) => {
@@ -22,10 +24,12 @@ export const Task = React.memo((props: TaskPropsType) => {
         props.changeTaskStatus(props.taskID, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, props.todoListID);
     }
 
+    const disable = props.entityStatus === 'loading'
+
     return <li>
-        <Checkbox onChange={onChangeHandler} checked={props.status === TaskStatuses.Completed} />
-        <EditableSpan title={props.title} callback={(title)=>props.changeTaskTitle(props.taskID, title)}/>
-        <IconButton onClick={onClickHandler} aria-label="fingerprint" color="secondary">
+        <Checkbox disabled={disable} onChange={onChangeHandler} checked={props.status === TaskStatuses.Completed} />
+        <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title)=>props.changeTaskTitle(props.taskID, title)}/>
+        <IconButton disabled={disable} onClick={onClickHandler} aria-label="fingerprint" color="secondary">
             <Fingerprint />
         </IconButton>
     </li>

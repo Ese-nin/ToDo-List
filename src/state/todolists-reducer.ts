@@ -65,6 +65,7 @@ export const CreateTodolistsTC = (title: string): AppThunk => (dispatch) => {
         .then((data) => {
             if (data.resultCode === ResponseCode.SUCCESS) {
                 dispatch(AddTodolistAC(data.data.item))
+                dispatch(changeAppStatusAC('idle'))
             } else {
                 handleServerAppError<{ item: TodolistDomainType }>(data, dispatch)
             }
@@ -98,6 +99,7 @@ export const ChangeTodolistsTC = (todolistID: string, title: string): AppThunk =
         .then((data) => {
             if (data.resultCode === ResponseCode.SUCCESS) {
                 dispatch(ChangeTodolistTitleAC(todolistID, title))
+                dispatch(changeAppStatusAC('idle'))
             } else {
                 handleServerAppError(data, dispatch)
             }

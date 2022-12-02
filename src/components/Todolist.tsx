@@ -29,7 +29,7 @@ export const Todolist = React.memo((props: PropsType) => {
 
     const dispatch = useAppDispatch()
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(SetTasksTC(props.id))
     }, [])
 
@@ -60,8 +60,10 @@ export const Todolist = React.memo((props: PropsType) => {
 
     return <div>
         <h3>
-            <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title) => changeTodoTitle(title)}/>
-            <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist} aria-label="fingerprint" color="secondary">
+            <EditableSpan entityStatus={props.entityStatus} title={props.title}
+                          callback={(title) => changeTodoTitle(title)}/>
+            <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist} aria-label="fingerprint"
+                        color="secondary">
                 <Fingerprint/>
             </IconButton>
         </h3>
@@ -97,7 +99,8 @@ export const Todolist = React.memo((props: PropsType) => {
                         title={t.title}
                         removeTask={props.removeTask}
                         changeTaskStatus={props.changeTaskStatus}
-                        changeTaskTitle={changeTaskTitle}/>
+                        changeTaskTitle={changeTaskTitle}
+                        entityStatus={t.entityStatus}/>
                 })
             }
         </ul>

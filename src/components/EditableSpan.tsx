@@ -5,7 +5,7 @@ import {AppStatusType} from "../state/app-reducer";
 type EditableSpanPropsType = {
     title: string
     callback: (title: string) => void
-    entityStatus?: AppStatusType
+    entityStatus: AppStatusType
 }
 
 export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
