@@ -1,4 +1,5 @@
 import axios from "axios";
+import {UpdateModelTaskType} from "../state/tasks-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -8,23 +9,89 @@ const instance = axios.create({
     }
 })
 
+
 export const todolistAPI = {
     getTodolists() {
         return instance.get<TodolistDomainType[]>('todo-lists')
-            .then(res=>res.data)
     },
     createTodolist(title: string) {
-        return instance.post<ResponseType<{item: TodolistDomainType}>>(`todo-lists`, {title})
-            .then(res=>res.data)
+        return instance.post<ResponseType<{ item: TodolistDomainType }>>(`todo-lists`, {title})
     },
     deleteTodolist(todolistID: string) {
         return instance.delete<ResponseType>(`todo-lists/${todolistID}`)
-            .then(res=>res.data)
     },
     changeTodolist(todolistID: string, title: string) {
         return instance.put<ResponseType>(`todo-lists/${todolistID}`, {title})
-            .then(res=>res.data)
     }
+}
+
+export const taskAPI = {
+    getTasks(todolistID: string) {
+        return instance.get<GetTasksResponseType>(`todo-lists/${todolistID}/tasks`)
+    },
+    createTask(todolistID: string, title: string) {
+        return instance.post<TaskResponseType<{ item: TaskDomainType }>>(`todo-lists/${todolistID}/tasks`, {title})
+    },
+    deleteTask(todolistID: string, taskID: string) {
+        return instance.delete<TaskResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`)
+    },
+    changeTask(todolistID: string, taskID: string, domainModel: UpdateModelTaskType) {
+        return instance.put<TaskResponseType<{ item: TaskDomainType }>>(`todo-lists/${todolistID}/tasks/${taskID}`, domainModel)
+    }
+}
+
+export const authAPI = {
+    me() {
+        return instance.get<ResponseType<IsAutorizedType>>('auth/me')
+    },
+    login(data: DomainLoginModelType) {
+        return instance.post<ResponseType<{ userId: number }>>('auth/login', data)
+    },
+    logout() {
+        return instance.delete<ResponseType>('auth/login')
+    }
+}
+
+
+// types
+
+export type TaskDomainType = {
+    description: string
+    title: string
+    completed: boolean
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
+    id: string
+    todoListId: string
+    order: number
+    addedDate: string
+}
+type GetTasksResponseType = {
+    items: TaskDomainType[],
+    totalCount: number,
+    error: string
+}
+type TaskResponseType<T = {}> = {
+    resultCode: number,
+    messages: string[],
+    data: T
+}
+
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
 }
 
 export type TodolistDomainType = {
@@ -41,5 +108,19 @@ export type ResponseType<T = {}> = {
 
 export enum ResponseCode {
     SUCCESS = 0,
+    REQUEST_IS_INVALID = 1,
     CAPTCHA = 10,
+}
+
+type DomainLoginModelType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: boolean
+}
+
+type IsAutorizedType = {  // идиотское имя, потом поменяю
+    id: number
+    email: string
+    login: string
 }
