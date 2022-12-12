@@ -1,14 +1,47 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
-import {AppBar, Button, Container, IconButton, LinearProgress, Toolbar, Typography} from "@mui/material";
+import {
+    AppBar,
+    Button,
+    CircularProgress,
+    Container,
+    IconButton,
+    LinearProgress,
+    Toolbar,
+    Typography
+} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import {TodoListsList} from "./components/TodoListsList";
 import {ErrorAlert} from "./components/ErrorAlert";
-import {useAppSelector} from "./store/store";
+import {useAppDispatch, useAppSelector} from "./store/store";
+import {Navigate, Route, Routes} from "react-router-dom";
+import {LoginPage} from "./components/Login";
+import {initializeAppTC} from "./state/app-reducer";
+import {logOutTC} from "./state/auth-reducer";
 
 function App() {
 
     const appStatus = useAppSelector(state => state.app.appStatus)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const isInitialized = useAppSelector(st => st.app.isInitialized)
+
+    const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+        dispatch(initializeAppTC())
+    }, [])
+
+    const logoutHandler = () => {
+        dispatch(logOutTC())
+    }
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
 
     return (
         <div className="App">
@@ -21,12 +54,17 @@ function App() {
                     <Typography variant="h6">
                         News
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button onClick={logoutHandler} color="inherit">Log out</Button>}
                 </Toolbar>
                 {appStatus === 'loading' && <LinearProgress />}
             </AppBar>
             <Container fixed>
-                <TodoListsList/>
+                <Routes>
+                    <Route path={'/'} element={<TodoListsList/>}/>
+                    <Route path={'/login'} element={<LoginPage/>}/>
+                    <Route path={'/404'} element={<h1>404: PAGE NOT FOUND</h1>}/>
+                    <Route path={'*'} element={<Navigate to='/404'/>}/>
+                </Routes>
             </Container>
         </div>
     );

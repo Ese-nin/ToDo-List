@@ -2,7 +2,7 @@ import React from 'react';
 import {
     AddTodolistAC, ChangeEntityStatusAC,
     ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC, FilterValuesType,
+    ChangeTodolistTitleAC, ClearDataAC, FilterValuesType,
     RemoveTodolistAC, SetTodoAC,
     todolistsReducer
 } from './todolists-reducer';
@@ -92,4 +92,11 @@ test('entityStatus should be changed', () => {
 
     expect(endState[1].entityStatus).toBe(newStatus)
     expect(endState[0].entityStatus).toBe('idle')
+})
+
+test('state must be reset', () => {
+
+    const endState = todolistsReducer(startState, ClearDataAC())
+
+    expect(endState).toStrictEqual([])
 })

@@ -1,14 +1,13 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import AddItem from "./AddItem";
 import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
 import {Button, IconButton} from "@mui/material";
 import {Fingerprint} from "@mui/icons-material";
-import {SetTasksTC, TasksStateType} from "../state/tasks-reducer";
+import {TasksStateType} from "../state/tasks-reducer";
 import {FilterValuesType} from "../state/todolists-reducer";
-import {TaskStatuses} from "../api/task-api";
-import {useAppDispatch} from "../store/store";
 import {AppStatusType} from "../state/app-reducer";
+import {TaskStatuses} from "../api/todolist-api";
 
 type PropsType = {
     id: string
@@ -26,12 +25,6 @@ type PropsType = {
 }
 
 export const Todolist = React.memo((props: PropsType) => {
-
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        dispatch(SetTasksTC(props.id))
-    }, [])
 
     const removeTodolist = () => props.removeTodolist(props.id)
 

@@ -4,15 +4,17 @@ import {TodolistActionsType, todolistsReducer} from "../state/todolists-reducer"
 import thunkMiddleware, {ThunkAction, ThunkDispatch} from "redux-thunk";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {appReducer, AppReducerActionsType} from "../state/app-reducer";
+import {AuthActionsType, authReducer} from "../state/auth-reducer";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todoLists: todolistsReducer,
-    app: appReducer
+    app: appReducer,
+    auth: authReducer
 })
 
 export type AppRootStateType = ReturnType<typeof rootReducer>
-type AppActionsType = TodolistActionsType | TasksActionsType | AppReducerActionsType
+type AppActionsType = TodolistActionsType | TasksActionsType | AppReducerActionsType | AuthActionsType
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 // типизация санок для работы с react 18

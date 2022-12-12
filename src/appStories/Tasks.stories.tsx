@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {taskAPI} from "../api/task-api";
 import {UpdateModelTaskType} from "../state/tasks-reducer";
+import {taskAPI} from "../api/todolist-api";
 
 export default {
     title: 'tasks'

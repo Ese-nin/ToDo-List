@@ -112,7 +112,7 @@ export enum ResponseCode {
     CAPTCHA = 10,
 }
 
-type DomainLoginModelType = {
+export type DomainLoginModelType = {
     email: string
     password: string
     rememberMe?: boolean

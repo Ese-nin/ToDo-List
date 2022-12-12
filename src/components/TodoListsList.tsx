@@ -12,9 +12,9 @@ import {
     FilterValuesType,
     SetTodolistsTC
 } from "../state/todolists-reducer";
-import {TodolistDomainType} from "../api/todolist-api";
-import {TaskStatuses} from "../api/task-api";
+import {TaskStatuses, TodolistDomainType} from "../api/todolist-api";
 import {AppStatusType} from "../state/app-reducer";
+import {Navigate} from "react-router-dom";
 
 export type TodolistType = TodolistDomainType & {
     filter: FilterValuesType
@@ -25,6 +25,7 @@ export const TodoListsList = () => {
 
     const todolists = useAppSelector<TodolistType[]>(state => state.todoLists)
     const tasks = useAppSelector<TasksStateType>(state => state.tasks)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
     const dispatch = useAppDispatch()
 
@@ -62,8 +63,15 @@ export const TodoListsList = () => {
     }, [])
 
     useEffect(()=>{
+        if (!isLoggedIn) {
+            return
+        }
         dispatch(SetTodolistsTC())
     }, [])
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <>
