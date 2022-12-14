@@ -1,5 +1,5 @@
 import {ThunkAppDispatchType} from "../store/store";
-import {authAPI, ResponseCode} from "../api/todolist-api";
+import {authAPI, IsAutorizedResponseType, ResponseCode} from "../api/todolist-api";
 import {SetIsLoggedInAC} from "./auth-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
@@ -58,7 +58,7 @@ export const initializeAppTC = () => (dispatch: ThunkAppDispatchType) => {
         if (res.data.resultCode === ResponseCode.SUCCESS) {
             dispatch(SetIsLoggedInAC(true));
         } else {
-            handleServerAppError(res.data, dispatch)
+            handleServerAppError<IsAutorizedResponseType>(res.data, dispatch)
         }
     })
         .catch((err) => {

@@ -42,7 +42,7 @@ export const taskAPI = {
 
 export const authAPI = {
     me() {
-        return instance.get<ResponseType<IsAutorizedType>>('auth/me')
+        return instance.get<ResponseType<IsAutorizedResponseType>>('auth/me')
     },
     login(data: DomainLoginModelType) {
         return instance.post<ResponseType<{ userId: number }>>('auth/login', data)
@@ -119,7 +119,7 @@ export type DomainLoginModelType = {
     captcha?: boolean
 }
 
-type IsAutorizedType = {  // идиотское имя, потом поменяю
+export type IsAutorizedResponseType = {
     id: number
     email: string
     login: string
