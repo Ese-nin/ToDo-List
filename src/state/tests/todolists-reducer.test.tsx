@@ -5,9 +5,9 @@ import {
     ChangeTodolistTitleAC, ClearDataAC, FilterValuesType,
     RemoveTodolistAC, SetTodoAC,
     todolistsReducer
-} from './todolists-reducer';
+} from '../todolists-reducer';
 import {v1} from 'uuid';
-import {TodolistType} from "../components/TodoListsList";
+import {TodolistType} from "../../components/TodoListsList";
 
 let startState: Array<TodolistType>;
 let todolistId1 = v1();

@@ -1,4 +1,4 @@
-import {authReducer, InitialStateType, SetIsLoggedInAC} from "./auth-reducer";
+import {authReducer, InitialStateType, SetIsLoggedInAC} from "../auth-reducer";
 
 let startState: InitialStateType;
 beforeEach(() => {
