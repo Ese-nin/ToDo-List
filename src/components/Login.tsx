@@ -11,30 +11,8 @@ import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../store/store";
 import {loginTC} from "../state/auth-reducer";
 import {Navigate} from "react-router-dom";
+import * as Yup from 'yup';
 
-type FormikErrorType = {
-    email?: string
-    password?: string
-    rememberMe?: boolean
-}
-
-const validate = (values: FormikErrorType) => {
-    const errors: FormikErrorType = {};
-
-    if (!values.email) {
-        errors.email = 'Field is required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-
-    if (!values.password) {
-        errors.password = 'Field is required';
-    } else if (values.password.length < 6) {
-        errors.password = 'Must be 6 characters or more';
-    }
-
-    return errors;
-};
 
 export const LoginPage = () => {
 
@@ -48,7 +26,11 @@ export const LoginPage = () => {
             password: '',
             rememberMe: false,
         },
-        validate,
+        validationSchema: Yup.object({
+            email: Yup.string().email('Invalid email address').required('Required'),
+            password: Yup.string().min(4, 'Must be 4 characters or more').required('Required'),
+
+        }),
         onSubmit: (values) => {
             dispatch(loginTC(values))
             formik.resetForm();
