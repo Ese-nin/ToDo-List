@@ -4,7 +4,6 @@ import {AppThunk} from "../store/store";
 import {AppStatusType, changeAppStatusAC} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {SetTasksTC} from "./tasks-reducer";
-import {Dispatch} from "redux";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
@@ -61,7 +60,7 @@ export const {
 } = slice.actions
 
 // thunk
-export const SetTodolistsTC = (): AppThunk => (dispatch: any) => {
+export const SetTodolistsTC = (): AppThunk => (dispatch) => {
     dispatch(changeAppStatusAC({appStatus: 'loading'}))
     todolistAPI.getTodolists()
         .then((res) => {
@@ -78,7 +77,7 @@ export const SetTodolistsTC = (): AppThunk => (dispatch: any) => {
             handleServerNetworkError(err, dispatch)
         })
 }
-export const CreateTodolistsTC = (title: string): AppThunk => (dispatch: Dispatch) => {
+export const CreateTodolistsTC = (title: string): AppThunk => (dispatch) => {
     dispatch(changeAppStatusAC({appStatus: 'loading'}))
     todolistAPI.createTodolist(title)
         .then((res) => {
@@ -93,7 +92,7 @@ export const CreateTodolistsTC = (title: string): AppThunk => (dispatch: Dispatc
             handleServerNetworkError(err, dispatch)
         })
 }
-export const DeleteTodolistsTC = (todolistID: string): AppThunk => (dispatch: Dispatch) => {
+export const DeleteTodolistsTC = (todolistID: string): AppThunk => (dispatch) => {
     dispatch(changeAppStatusAC({appStatus: 'loading'}))
     dispatch(changeEntityStatusAC({todolistId: todolistID, entityStatus: 'loading'}))
     todolistAPI.deleteTodolist(todolistID)
@@ -112,7 +111,7 @@ export const DeleteTodolistsTC = (todolistID: string): AppThunk => (dispatch: Di
             dispatch(changeEntityStatusAC({todolistId: todolistID, entityStatus: 'idle'}))
         })
 }
-export const ChangeTodolistsTC = (todolistID: string, title: string): AppThunk => (dispatch: Dispatch) => {
+export const ChangeTodolistsTC = (todolistID: string, title: string): AppThunk => (dispatch) => {
     dispatch(changeAppStatusAC({appStatus: 'loading'}))
     todolistAPI.changeTodolist(todolistID, title)
         .then((res) => {

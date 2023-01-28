@@ -2,7 +2,7 @@ import {authAPI, IsAutorizedResponseType, ResponseCode} from "../api/todolist-ap
 import {setIsLoggedInAC} from "./auth-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Dispatch} from "redux";
+import {AppThunk} from "../store/store";
 
 const initialState = {
     appStatus: 'idle',
@@ -33,7 +33,7 @@ export const {setInitializedAC, changeAppStatusAC, changeAppErrorAC} = slice.act
 
 // thunks
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
+export const initializeAppTC = (): AppThunk => (dispatch) => {
     authAPI.me().then(res => {
         if (res.data.resultCode === ResponseCode.SUCCESS) {
             dispatch(setIsLoggedInAC({isLoggedIn: true}));

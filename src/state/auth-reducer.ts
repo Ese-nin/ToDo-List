@@ -1,8 +1,8 @@
 import {authAPI, DomainLoginModelType, ResponseCode} from "../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {changeAppStatusAC} from "./app-reducer";
-import {Dispatch} from "redux";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppThunk} from "../store/store";
 
 const initialState = {
     isLoggedIn: false
@@ -24,7 +24,7 @@ export const {setIsLoggedInAC} = slice.actions;
 
 // thanks
 
-export const loginTC = (data: DomainLoginModelType) => (dispatch: Dispatch) => {
+export const loginTC = (data: DomainLoginModelType): AppThunk => (dispatch) => {
     dispatch(changeAppStatusAC({appStatus: "loading"}))
     authAPI.login(data)
         .then((res) => {
@@ -40,7 +40,7 @@ export const loginTC = (data: DomainLoginModelType) => (dispatch: Dispatch) => {
         })
 }
 
-export const logOutTC = () => (dispatch: Dispatch) => {
+export const logOutTC = (): AppThunk => (dispatch) => {
     dispatch(changeAppStatusAC({appStatus: "loading"}))
     authAPI.logout()
         .then((res) => {
