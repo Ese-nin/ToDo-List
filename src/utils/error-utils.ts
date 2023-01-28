@@ -1,17 +1,16 @@
 import {ResponseType} from "../api/todolist-api";
-import {Dispatch} from "react";
-import {AppReducerActionsType, changeAppErrorAC, changeAppStatusAC} from "../state/app-reducer";
+import {changeAppErrorAC, changeAppStatusAC} from "../state/app-reducer";
+import {Dispatch} from "redux";
 
-export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: ErrorUtilsDispatchType) => {
+export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: Dispatch) => {
     data.messages.length
-        ? dispatch(changeAppErrorAC(data.messages[0]))
-        : dispatch(changeAppErrorAC('Some error occurred'));
-    dispatch(changeAppStatusAC('failed'))
+        ? dispatch(changeAppErrorAC({error: data.messages[0]}))
+        : dispatch(changeAppErrorAC({error: 'Some error occurred'}));
+    dispatch(changeAppStatusAC({appStatus: 'failed'}))
 }
 
-export const handleServerNetworkError = (error: {message: string}, dispatch: ErrorUtilsDispatchType) => {
-    dispatch(changeAppErrorAC(error.message))
-    dispatch(changeAppStatusAC('failed'))
+export const handleServerNetworkError = (error: {message: string}, dispatch: Dispatch) => {
+    dispatch(changeAppErrorAC({error: error.message}))
+    dispatch(changeAppStatusAC({appStatus: 'failed'}))
 }
 
-type ErrorUtilsDispatchType = Dispatch<AppReducerActionsType>

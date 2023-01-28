@@ -1,6 +1,6 @@
-import {AppInitStatePropsType, appReducer, changeAppStatusAC, changeAppErrorAC, setInitializedAC} from "../app-reducer";
+import {appReducer, changeAppErrorAC, changeAppStatusAC, setInitializedAC} from "../app-reducer";
 
-let startState: AppInitStatePropsType;
+let startState: any;
 
 beforeEach(() => {
     startState = {
@@ -13,7 +13,7 @@ beforeEach(() => {
 test('appStatus should be changed', () => {
     const newAppStatus = 'loading';
 
-    const endState = appReducer(startState, changeAppStatusAC(newAppStatus))
+    const endState = appReducer(startState, changeAppStatusAC({appStatus: newAppStatus}))
 
     expect(endState.appStatus).toBe(newAppStatus)
 })
@@ -21,7 +21,7 @@ test('appStatus should be changed', () => {
 test('error should be changed', () => {
     const newError = 'Some error'
 
-    const endState = appReducer(startState, changeAppErrorAC(newError))
+    const endState = appReducer(startState, changeAppErrorAC({error: newError}))
 
     expect(endState.error).toBe(newError)
 })
@@ -29,7 +29,7 @@ test('error should be changed', () => {
 test('isInitialized should became "true"', () => {
     const newInitialize = true;
 
-    const endState = appReducer(startState, setInitializedAC(newInitialize))
+    const endState = appReducer(startState, setInitializedAC({isInitialized: newInitialize}))
 
     expect(endState.isInitialized).toBe(newInitialize)
 })

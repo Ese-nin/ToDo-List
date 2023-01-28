@@ -5,7 +5,7 @@ import AddItem from "./AddItem";
 import {useAppDispatch, useAppSelector} from "../store/store";
 import {CreateTasksTC, DeleteTasksTC, TasksStateType, UpdateTaskTC} from "../state/tasks-reducer";
 import {
-    ChangeTodolistFilterAC,
+    changeTodolistFilterAC,
     ChangeTodolistsTC,
     CreateTodolistsTC,
     DeleteTodolistsTC,
@@ -42,7 +42,7 @@ export const TodoListsList = () => {
     }, [])
 
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
-        const action = ChangeTodolistFilterAC(todolistId, value)
+        const action = changeTodolistFilterAC({todolistId: todolistId, filter: value})
         dispatch(action)
     }, [])
 
