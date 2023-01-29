@@ -20,8 +20,8 @@ const slice = createSlice({
                 tasks.splice(index, 1)
             }
         },
-        addTaskAC(state, action: PayloadAction<{ task: TaskDomainType }>) {
-            state[action.payload.task.todoListId].unshift({...action.payload.task, entityStatus: 'idle'})
+        addTaskAC(state, action: PayloadAction<TaskDomainType>) {
+            state[action.payload.todoListId].unshift({...action.payload, entityStatus: 'idle'})
         },
         updateTaskAC(state, action: PayloadAction<{ task: TaskDomainType }>) {
             const tasks = state[action.payload.task.todoListId];
@@ -77,7 +77,7 @@ export const CreateTasksTC = (todolistID: string, title: string): AppThunk => (d
     taskAPI.createTask(todolistID, title)
         .then((res) => {
             if (res.data.resultCode === ResponseCode.SUCCESS) {
-                dispatch(addTaskAC({task: res.data.data.item}))
+                dispatch(addTaskAC(res.data.data.item))
                 dispatch(changeAppStatusAC({appStatus: 'idle'}))
             } else {
                 handleServerAppError(res.data, dispatch)

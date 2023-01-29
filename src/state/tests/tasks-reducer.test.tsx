@@ -196,7 +196,7 @@ test('correct task should be added to correct array', () => {
         addedDate: '', description: '', priority: TaskPriorities.Low, completed: false, order: 0, entityStatus: "idle"
     }
 
-    const action = addTaskAC({task})
+    const action = addTaskAC(task)
 
     const endState = tasksReducer(startState, action)
 
