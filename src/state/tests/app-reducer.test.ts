@@ -1,4 +1,4 @@
-import {appReducer, changeAppErrorAC, changeAppStatusAC, setInitializedAC} from "../app-reducer";
+import {appReducer, changeAppErrorAC, changeAppStatusAC, initializeApp} from "../app-reducer";
 
 let startState: any;
 
@@ -29,7 +29,7 @@ test('error should be changed', () => {
 test('isInitialized should became "true"', () => {
     const newInitialize = true;
 
-    const endState = appReducer(startState, setInitializedAC({isInitialized: newInitialize}))
+    const endState = appReducer(startState, initializeApp.fulfilled({isInitialized: newInitialize}, ''))
 
     expect(endState.isInitialized).toBe(newInitialize)
 })

@@ -1,18 +1,34 @@
-import {authAPI, IsAutorizedResponseType, ResponseCode} from "../api/todolist-api";
+import {authAPI, ResponseCode} from "../api/todolist-api";
 import {setIsLoggedInAC} from "./auth-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AppThunk} from "../store/store";
+import {handleServerNetworkError} from "../utils/error-utils";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AxiosError} from "axios";
 
-const initialState = {
-    appStatus: 'idle',
-    error: null as string | null,
-    isInitialized: false
-}
+export const initializeApp = createAsyncThunk('app/initialize', async (param, {
+    dispatch,
+}) => {
+    try {
+        const res = await authAPI.me()
+
+        if (res.data.resultCode === ResponseCode.SUCCESS) {
+            dispatch(setIsLoggedInAC({isLoggedIn: true}));
+        }
+    } catch (err) {
+        const error = err as AxiosError;
+        handleServerNetworkError(error, dispatch)
+    } finally {
+        return {isInitialized: true}
+    }
+})
+
 
 const slice = createSlice({
     name: 'app',
-    initialState,
+    initialState: {
+        appStatus: 'idle',
+        error: null as string | null,
+        isInitialized: false
+    },
     reducers: {
         changeAppStatusAC(state, action: PayloadAction<{ appStatus: AppStatusType }>) {
             state.appStatus = action.payload.appStatus
@@ -20,34 +36,17 @@ const slice = createSlice({
         changeAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
             state.error = action.payload.error
         },
-        setInitializedAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
+    },
+    extraReducers: builder => {
+        builder.addCase(initializeApp.fulfilled, (state, action) => {
             state.isInitialized = action.payload.isInitialized
-        }
+        })
     }
 })
 
 
 export const appReducer = slice.reducer
-export const {setInitializedAC, changeAppStatusAC, changeAppErrorAC} = slice.actions
-
-
-// thunks
-
-export const initializeAppTC = (): AppThunk => (dispatch) => {
-    authAPI.me().then(res => {
-        if (res.data.resultCode === ResponseCode.SUCCESS) {
-            dispatch(setIsLoggedInAC({isLoggedIn: true}));
-        } else {
-            handleServerAppError<IsAutorizedResponseType>(res.data, dispatch)
-        }
-    })
-        .catch((err) => {
-            handleServerNetworkError(err, dispatch)
-        })
-        .finally(() => {
-            dispatch(setInitializedAC({isInitialized: true}))
-        })
-}
+export const {changeAppStatusAC, changeAppErrorAC} = slice.actions
 
 
 // types

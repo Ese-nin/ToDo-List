@@ -16,8 +16,8 @@ import {ErrorAlert} from "./components/ErrorAlert";
 import {useAppDispatch, useAppSelector} from "./store/store";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {LoginPage} from "./components/Login";
-import {initializeAppTC} from "./state/app-reducer";
-import {logOutTC} from "./state/auth-reducer";
+import {initializeApp} from "./state/app-reducer";
+import {logOut} from "./state/auth-reducer";
 
 function App() {
 
@@ -28,11 +28,11 @@ function App() {
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
-        dispatch(initializeAppTC())
+        dispatch(initializeApp())
     }, [])
 
     const logoutHandler = () => {
-        dispatch(logOutTC())
+        dispatch(logOut())
     }
 
     if (!isInitialized) {

@@ -100,9 +100,15 @@ export type TodolistDomainType = {
     order: number
     title: string
 }
+
+export type FieldErrorsType = {
+    field: string
+    error: string
+}
 export type ResponseType<T = {}> = {
     resultCode: number,
     messages: string[],
+    fieldsErrors?: FieldErrorsType[]
     data: T
 }
 

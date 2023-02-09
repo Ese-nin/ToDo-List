@@ -7,12 +7,17 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {useFormik} from "formik";
+import {FormikHelpers, useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../store/store";
-import {loginTC} from "../state/auth-reducer";
 import {Navigate} from "react-router-dom";
 import * as Yup from 'yup';
+import {login} from "../state/auth-reducer";
 
+type FormValuesType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
 
 export const LoginPage = () => {
 
@@ -31,9 +36,14 @@ export const LoginPage = () => {
             password: Yup.string().min(4, 'Must be 4 characters or more').required('Required'),
 
         }),
-        onSubmit: (values) => {
-            dispatch(loginTC(values))
-            formik.resetForm();
+        onSubmit: async (values, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const action = await dispatch(login(values))
+            if (login.rejected.match(action)) {
+                if (action.payload?.fieldsErrors?.length) {
+                    const error = action.payload.fieldsErrors[0]
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
         },
     });
 

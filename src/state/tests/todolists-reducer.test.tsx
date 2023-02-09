@@ -1,9 +1,13 @@
 import React from 'react';
 import {
-    addTodolistAC, changeEntityStatusAC,
+    changeEntityStatusAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, clearDataAC, FilterValuesType,
-    removeTodolistAC, setTodoAC,
+    changeTodolistTitle,
+    clearDataAC,
+    createTodolist,
+    deleteTodolist,
+    fetchTodolists,
+    FilterValuesType,
     todolistsReducer
 } from '../todolists-reducer';
 import {v1} from 'uuid';
@@ -13,7 +17,7 @@ let startState: Array<TodolistType>;
 let todolistId1 = v1();
 let todolistId2 = v1();
 
-beforeEach(()=>{
+beforeEach(() => {
     startState = [
         {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0, entityStatus: "idle"},
         {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0, entityStatus: "idle"}
@@ -23,7 +27,7 @@ beforeEach(()=>{
 
 test('correct todolist should be removed', () => {
 
-    const endState = todolistsReducer(startState, removeTodolistAC({todolistId: todolistId1}))
+    const endState = todolistsReducer(startState, deleteTodolist.fulfilled({todolistId: todolistId1}, 'requestId', todolistId1))
 
     expect(endState.length).toBe(1);
     expect(endState[0].id).toBe(todolistId2);
@@ -33,7 +37,14 @@ test('correct todolist should be added', () => {
 
     let newTodolistTitle = "New Todolist";
 
-    const endState = todolistsReducer(startState, addTodolistAC({todolist: {id: todolistId2, title: newTodolistTitle, addedDate: '', order: 0}}))
+    const endState = todolistsReducer(startState, createTodolist.fulfilled({
+        todolist: {
+            id: todolistId2,
+            title: newTodolistTitle,
+            addedDate: '',
+            order: 0
+        }
+    }, 'requestId', newTodolistTitle))
 
     expect(endState.length).toBe(3);
     expect(endState[0].title).toBe(newTodolistTitle);
@@ -45,7 +56,8 @@ test('correct todolist should change its name', () => {
 
     let newTodolistTitle = "New Todolist";
 
-    const action = changeTodolistTitleAC({todolistId: todolistId2, title: newTodolistTitle});
+    const param = {todolistId: todolistId2, title: newTodolistTitle}
+    const action = changeTodolistTitle.fulfilled(param, 'requestId', {todolistID: todolistId2, title: newTodolistTitle});
 
     const endState = todolistsReducer(startState, action);
 
@@ -75,7 +87,7 @@ test('actual todos should be added', () => {
         {id: todolistId2, title: "What to buy", addedDate: '', order: 0}
     ]
 
-    const action = setTodoAC({todolists: todolists});
+    const action = fetchTodolists.fulfilled({todolists: todolists}, 'requestId');
 
     const endState = todolistsReducer(startState, action);
 
@@ -88,7 +100,10 @@ test('actual todos should be added', () => {
 test('entityStatus should be changed', () => {
     const newStatus = 'loading'
 
-    const endState = todolistsReducer(startState, changeEntityStatusAC({todolistId: todolistId2, entityStatus: newStatus}))
+    const endState = todolistsReducer(startState, changeEntityStatusAC({
+        todolistId: todolistId2,
+        entityStatus: newStatus
+    }))
 
     expect(endState[1].entityStatus).toBe(newStatus)
     expect(endState[0].entityStatus).toBe('idle')
