@@ -1,9 +1,10 @@
 import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
-import {useAppSelector} from "../store/store";
-import {changeAppErrorAC} from "../state/app-reducer";
+import {useAppSelector} from "store/store";
+import {changeAppErrorAC} from "state/app-reducer";
 import {useDispatch} from "react-redux";
+import {errorSelector} from "state/selectors";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -14,7 +15,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export const ErrorAlert = () => {
 
-    const error = useAppSelector(state => state.app.error)
+    const error = useAppSelector(errorSelector)
 
     const dispatch = useDispatch()
 

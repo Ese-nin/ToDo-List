@@ -2,19 +2,20 @@ import React, {useCallback, useEffect} from 'react';
 import {Grid, Paper} from "@mui/material";
 import {Todolist} from "./Todolist";
 import AddItem from "./AddItem";
-import {useAppDispatch, useAppSelector} from "../store/store";
-import {createTask, deleteTask, TasksStateType, updateTask} from "../state/tasks-reducer";
+import {useAppDispatch, useAppSelector} from "store/store";
+import {createTask, deleteTask, updateTask} from "state/tasks-reducer";
 import {
-    changeTodolistTitle,
     changeTodolistFilterAC,
+    changeTodolistTitle,
     createTodolist,
     deleteTodolist,
     fetchTodolists,
     FilterValuesType,
-} from "../state/todolists-reducer";
-import {TaskStatuses, TodolistDomainType} from "../api/todolist-api";
-import {AppStatusType} from "../state/app-reducer";
+} from "state/todolists-reducer";
+import {TaskStatuses, TodolistDomainType} from "api/todolist-api";
+import {AppStatusType} from "state/app-reducer";
 import {Navigate} from "react-router-dom";
+import {isLoggedInSelector, tasksSelector, todolistsSelector} from "state/selectors";
 
 export type TodolistType = TodolistDomainType & {
     filter: FilterValuesType
@@ -23,9 +24,9 @@ export type TodolistType = TodolistDomainType & {
 
 export const TodoListsList = () => {
 
-    const todolists = useAppSelector<TodolistType[]>(state => state.todoLists)
-    const tasks = useAppSelector<TasksStateType>(state => state.tasks)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const todolists = useAppSelector(todolistsSelector)
+    const tasks = useAppSelector(tasksSelector)
+    const isLoggedIn = useAppSelector(isLoggedInSelector)
 
     const dispatch = useAppDispatch()
 
@@ -78,12 +79,12 @@ export const TodoListsList = () => {
             <Grid container style={{padding: '20px'}}>
                 <AddItem callback={addTodoList}/>
             </Grid>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: "scroll", height: "85vh"}}>
                 {
                     todolists.map(tl => {
 
                         return <Grid item key={tl.id}>
-                            <Paper style={{padding: '10px'}}>
+                            <Paper style={{padding: '10px', width: "280px", position: "relative"}}>
                                 <Todolist
                                     id={tl.id}
                                     title={tl.title}

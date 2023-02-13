@@ -1,7 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from "@mui/material";
 import Fingerprint from '@mui/icons-material/Fingerprint';
-import {AppStatusType} from "../state/app-reducer";
+import {AppStatusType} from "state/app-reducer";
 
 type AddItemPropsType = {
     callback: (title: string) => void
@@ -45,7 +45,8 @@ const AddItem = React.memo((props: AddItemPropsType) => {
             <IconButton onClick={addItem}
                         aria-label="fingerprint"
                         color="success"
-                        disabled={props.entityStatus === 'loading'}>
+                        disabled={props.entityStatus === 'loading'}
+                        title={'add'}>
                 <Fingerprint/>
             </IconButton>
         </div>

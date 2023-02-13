@@ -11,7 +11,8 @@ import {FormikHelpers, useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../store/store";
 import {Navigate} from "react-router-dom";
 import * as Yup from 'yup';
-import {login} from "../state/auth-reducer";
+import {login} from "state/auth-reducer";
+import {isLoggedInSelector} from "state/selectors";
 
 type FormValuesType = {
     email: string
@@ -21,7 +22,7 @@ type FormValuesType = {
 
 export const LoginPage = () => {
 
-    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector<boolean>(isLoggedInSelector)
 
     const dispatch = useAppDispatch()
 

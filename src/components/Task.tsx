@@ -2,8 +2,8 @@ import React, {ChangeEvent} from "react";
 import {EditableSpan} from "./EditableSpan";
 import {Checkbox, IconButton} from "@mui/material";
 import {Fingerprint} from "@mui/icons-material";
-import {AppStatusType} from "../state/app-reducer";
-import {TaskStatuses} from "../api/todolist-api";
+import {AppStatusType} from "state/app-reducer";
+import {TaskStatuses} from "api/todolist-api";
 
 type TaskPropsType = {
     todoListID: string
@@ -29,7 +29,7 @@ export const Task = React.memo((props: TaskPropsType) => {
     return <li>
         <Checkbox disabled={disable} onChange={onChangeHandler} checked={props.status === TaskStatuses.Completed} />
         <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title)=>props.changeTaskTitle(props.taskID, title)}/>
-        <IconButton disabled={disable} onClick={onClickHandler} aria-label="fingerprint" color="secondary">
+        <IconButton disabled={disable} onClick={onClickHandler} aria-label="fingerprint" color="secondary" title={'delete'}>
             <Fingerprint />
         </IconButton>
     </li>

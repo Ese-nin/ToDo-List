@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
 import {TextField} from "@mui/material";
-import {AppStatusType} from "../state/app-reducer";
+import {AppStatusType} from "state/app-reducer";
 
 type EditableSpanPropsType = {
     title: string
@@ -40,6 +40,6 @@ export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
                          value={currentTitle}
                          onChange={onChangeHandler}
                          autoFocus/>
-            : <span onDoubleClick={setEditModeOn}>{currentTitle}</span>
+            : <span className={'cutText'} title={currentTitle} onDoubleClick={setEditModeOn}>{currentTitle}</span>
     );
 });

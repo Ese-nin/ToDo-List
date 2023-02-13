@@ -18,12 +18,13 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import {LoginPage} from "./components/Login";
 import {initializeApp} from "./state/app-reducer";
 import {logOut} from "./state/auth-reducer";
+import {appStatusSelector, isInitializedSelector, isLoggedInSelector} from "./state/selectors";
 
 function App() {
 
-    const appStatus = useAppSelector(state => state.app.appStatus)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const isInitialized = useAppSelector(st => st.app.isInitialized)
+    const appStatus = useAppSelector(appStatusSelector)
+    const isLoggedIn = useAppSelector(isLoggedInSelector)
+    const isInitialized = useAppSelector(isInitializedSelector)
 
     const dispatch = useAppDispatch()
 

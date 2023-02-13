@@ -4,10 +4,10 @@ import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
 import {Button, IconButton} from "@mui/material";
 import {Fingerprint} from "@mui/icons-material";
-import {TasksStateType} from "../state/tasks-reducer";
-import {FilterValuesType} from "../state/todolists-reducer";
-import {AppStatusType} from "../state/app-reducer";
-import {TaskStatuses} from "../api/todolist-api";
+import {TasksStateType} from "state/tasks-reducer";
+import {FilterValuesType} from "state/todolists-reducer";
+import {AppStatusType} from "state/app-reducer";
+import {TaskStatuses} from "api/todolist-api";
 
 type PropsType = {
     id: string
@@ -28,12 +28,18 @@ export const Todolist = React.memo((props: PropsType) => {
 
     const removeTodolist = () => props.removeTodolist(props.id)
 
-    const onAllClickHandler = useCallback(() =>
-        props.changeFilter("all", props.id), [props.changeFilter, props.id]);
-    const onActiveClickHandler = useCallback(() =>
-        props.changeFilter("active", props.id), [props.changeFilter, props.id]);
-    const onCompletedClickHandler = useCallback(() =>
-        props.changeFilter("completed", props.id), [props.changeFilter, props.id]);
+    const onButtonFilterClickHandler = useCallback((filter: FilterValuesType) =>
+        props.changeFilter(filter, props.id), [props.changeFilter, props.id]);
+
+
+    const renderFilterButton = (buttonsFilter: FilterValuesType, text: string) => {
+        return <Button onClick={() => onButtonFilterClickHandler(buttonsFilter)}
+                       variant={props.filter === buttonsFilter ? "contained" : "outlined"}
+                       color="success"
+                       size={'small'}>
+            {text}
+        </Button>
+    }
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
@@ -56,30 +62,19 @@ export const Todolist = React.memo((props: PropsType) => {
             <EditableSpan entityStatus={props.entityStatus} title={props.title}
                           callback={(title) => changeTodoTitle(title)}/>
             <IconButton disabled={props.entityStatus === 'loading'} onClick={removeTodolist} aria-label="fingerprint"
-                        color="secondary">
+                        color="secondary" title={'delete'}
+            style={{position: "absolute", top: "5px", right: "5px"}}>
                 <Fingerprint/>
             </IconButton>
         </h3>
         <AddItem entityStatus={props.entityStatus} callback={addTask}/>
+
         <div style={{marginTop: '15px'}}>
-            <Button onClick={onAllClickHandler}
-                    variant={props.filter === 'all' ? "contained" : "outlined"}
-                    color="success"
-                    size={'small'}>
-                All
-            </Button>
-            <Button onClick={onActiveClickHandler}
-                    variant={props.filter === 'active' ? "contained" : "outlined"}
-                    color="success"
-                    size={'small'}>
-                Active
-            </Button>
-            <Button onClick={onCompletedClickHandler}
-                    variant={props.filter === 'completed' ? "contained" : "outlined"}
-                    color="success"
-                    size={'small'}>
-                Completed
-            </Button>
+
+            {renderFilterButton('all', 'All')}
+            {renderFilterButton('active', 'Active')}
+            {renderFilterButton('completed', 'Completed')}
+
         </div>
         <ul>
             {
