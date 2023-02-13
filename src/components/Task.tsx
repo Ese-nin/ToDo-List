@@ -29,8 +29,8 @@ export const Task = React.memo((props: TaskPropsType) => {
     return <li>
         <Checkbox disabled={disable} onChange={onChangeHandler} checked={props.status === TaskStatuses.Completed} />
         <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title)=>props.changeTaskTitle(props.taskID, title)}/>
-        <IconButton disabled={disable} onClick={onClickHandler} aria-label="fingerprint" color="secondary" title={'delete'}>
-            <Fingerprint />
+        <IconButton disabled={disable} onClick={onClickHandler} color="secondary" title={'delete'}>
+            <Fingerprint fontSize={'small'} />
         </IconButton>
     </li>
 })
