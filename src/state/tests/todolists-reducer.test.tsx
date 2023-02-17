@@ -2,16 +2,13 @@ import React from 'react';
 import {
     changeEntityStatusAC,
     changeTodolistFilterAC,
-    changeTodolistTitle,
     clearDataAC,
-    createTodolist,
-    deleteTodolist,
-    fetchTodolists,
     FilterValuesType,
     todolistsReducer
 } from '../todolists-reducer';
 import {v1} from 'uuid';
 import {TodolistType} from "../../components/TodoListsList";
+import {changeTodolistTitle, createTodolist, deleteTodolist, fetchTodolists} from "../todolist-actions";
 
 let startState: Array<TodolistType>;
 let todolistId1 = v1();

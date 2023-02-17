@@ -1,14 +1,13 @@
 import {
     changeTaskEntityStatusAC,
-    createTask,
-    deleteTask,
-    fetchTasks,
     tasksReducer,
     TasksStateType,
-    updateTask,
+
 } from '../tasks-reducer'
-import {clearDataAC, createTodolist} from "../todolists-reducer";
+import {clearDataAC} from "../todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../../api/todolist-api";
+import {createTask, deleteTask, fetchTasks, updateTask} from "../tasks-actions";
+import {createTodolist} from "../todolist-actions";
 
 let startState: TasksStateType
 

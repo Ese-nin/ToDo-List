@@ -1,21 +1,15 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Grid, Paper} from "@mui/material";
 import {Todolist} from "./Todolist";
 import AddItem from "./AddItem";
-import {useAppDispatch, useAppSelector} from "store/store";
-import {createTask, deleteTask, updateTask} from "state/tasks-reducer";
-import {
-    changeTodolistFilterAC,
-    changeTodolistTitle,
-    createTodolist,
-    deleteTodolist,
-    fetchTodolists,
-    FilterValuesType,
-} from "state/todolists-reducer";
-import {TaskStatuses, TodolistDomainType} from "api/todolist-api";
+import {useAppSelector} from "store/store";
+import {FilterValuesType,} from "state/todolists-reducer";
+import {TodolistDomainType} from "api/todolist-api";
 import {AppStatusType} from "state/app-reducer";
 import {Navigate} from "react-router-dom";
 import {isLoggedInSelector, tasksSelector, todolistsSelector} from "state/selectors";
+import {useActions} from "utils/useActions";
+import {todoActions} from "state";
 
 export type TodolistType = TodolistDomainType & {
     filter: FilterValuesType
@@ -28,46 +22,13 @@ export const TodoListsList = () => {
     const tasks = useAppSelector(tasksSelector)
     const isLoggedIn = useAppSelector(isLoggedInSelector)
 
-    const dispatch = useAppDispatch()
-
-    const removeTask = useCallback((taskID: string, todolistId: string) => {
-        dispatch(deleteTask({todolistId, taskID}))
-    }, [])
-
-    const addTask = useCallback((title: string, todolistID: string) => {
-        dispatch(createTask({todolistID, title}))
-    }, [])
-
-    const changeStatus = useCallback((taskID: string, status: TaskStatuses, todolistId: string) => {
-        dispatch(updateTask({todolistId, taskID, domainModel: {status}}))
-    }, [])
-
-    const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
-        const action = changeTodolistFilterAC({todolistId: todolistId, filter: value})
-        dispatch(action)
-    }, [])
-
-    const removeTodolist = useCallback((id: string) => {
-        dispatch(deleteTodolist(id))
-    }, [])
-
-    const addTodoList = useCallback((title: string) => {
-        dispatch(createTodolist(title))
-    }, [])
-
-    const changeTaskTitle = useCallback((todolistId: string, taskID: string, title: string) => {
-        dispatch(updateTask({todolistId, taskID, domainModel: {title}}))
-    }, [])
-
-    const changeTodoListTitle = useCallback((todolistID: string, title: string) => {
-        dispatch(changeTodolistTitle({todolistID, title}))
-    }, [])
+    const {createTodolist, fetchTodolists} = useActions(todoActions)
 
     useEffect(() => {
         if (!isLoggedIn) {
             return
         }
-        dispatch(fetchTodolists())
+        fetchTodolists()
     }, [])
 
     if (!isLoggedIn) {
@@ -77,7 +38,7 @@ export const TodoListsList = () => {
     return (
         <>
             <Grid container style={{padding: '20px'}}>
-                <AddItem callback={addTodoList}/>
+                <AddItem callback={createTodolist}/>
             </Grid>
             <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: "scroll", height: "85vh"}}>
                 {
@@ -89,14 +50,7 @@ export const TodoListsList = () => {
                                     id={tl.id}
                                     title={tl.title}
                                     tasks={tasks}
-                                    removeTask={removeTask}
-                                    changeFilter={changeFilter}
-                                    addTask={addTask}
-                                    changeTaskStatus={changeStatus}
                                     filter={tl.filter}
-                                    removeTodolist={removeTodolist}
-                                    changeTaskTitle={changeTaskTitle}
-                                    changeTodoListTitle={changeTodoListTitle}
                                     entityStatus={tl.entityStatus}
                                 />
                             </Paper>

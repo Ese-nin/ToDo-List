@@ -4,33 +4,43 @@ import {Checkbox, IconButton} from "@mui/material";
 import {Fingerprint} from "@mui/icons-material";
 import {AppStatusType} from "state/app-reducer";
 import {TaskStatuses} from "api/todolist-api";
+import {useActions} from "utils/useActions";
+import {tasksActions} from "state";
 
 type TaskPropsType = {
     todoListID: string
     status: number
     taskID: string
     title: string
-    removeTask: (taskId: string, todolistId: string) => void
-    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
-    changeTaskTitle: (taskID: string, title: string) => void
     entityStatus: AppStatusType
 }
 
 export const Task = React.memo((props: TaskPropsType) => {
 
-    const onClickHandler = () => props.removeTask(props.taskID, props.todoListID)
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const {deleteTask, updateTask} = useActions(tasksActions)
+
+    const onClickHandler = () => deleteTask({taskID: props.taskID, todolistId: props.todoListID})
+    const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked;
-        props.changeTaskStatus(props.taskID, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, props.todoListID);
+        updateTask({
+            taskID: props.taskID,
+            domainModel: {status: newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New},
+            todolistId: props.todoListID
+        });
     }
 
     const disable = props.entityStatus === 'loading'
 
     return <li>
-        <Checkbox disabled={disable} onChange={onChangeHandler} checked={props.status === TaskStatuses.Completed} />
-        <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title)=>props.changeTaskTitle(props.taskID, title)}/>
+        <Checkbox disabled={disable} onChange={onChangeStatusHandler}
+                  checked={props.status === TaskStatuses.Completed}/>
+        <EditableSpan entityStatus={props.entityStatus} title={props.title} callback={(title) => updateTask({
+            taskID: props.taskID,
+            domainModel: {title},
+            todolistId: props.todoListID
+        })}/>
         <IconButton disabled={disable} onClick={onClickHandler} color="secondary" title={'delete'}>
-            <Fingerprint fontSize={'small'} />
+            <Fingerprint fontSize={'small'}/>
         </IconButton>
     </li>
 })

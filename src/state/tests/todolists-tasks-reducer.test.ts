@@ -1,7 +1,8 @@
 import {tasksReducer, TasksStateType} from "../tasks-reducer";
-import {createTodolist, deleteTodolist, todolistsReducer} from "../todolists-reducer";
+import {todolistsReducer} from "../todolists-reducer";
 import {TodolistType} from "../../components/TodoListsList";
 import {TaskPriorities, TaskStatuses} from "../../api/todolist-api";
+import {createTodolist, deleteTodolist} from "../todolist-actions";
 
 
 test('ids should be equals', () => {
