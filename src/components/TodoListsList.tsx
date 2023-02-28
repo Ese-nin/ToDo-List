@@ -24,8 +24,6 @@ export const TodoListsList = () => {
 
     const {createTodolist, fetchTodolists} = useActions(todoActions)
 
-    console.log(789971256)
-
     useEffect(() => {
         if (isLoggedIn && !todolists.length) {
             fetchTodolists()
