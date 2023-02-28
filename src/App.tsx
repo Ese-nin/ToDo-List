@@ -29,6 +29,9 @@ function App() {
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
+        if (isInitialized) {
+            return
+        }
         dispatch(initializeApp())
     }, [])
 
