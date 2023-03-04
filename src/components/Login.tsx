@@ -9,9 +9,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../store/store";
-import {loginTC} from "../state/auth-reducer";
 import {Navigate} from "react-router-dom";
 import * as Yup from 'yup';
+import {login} from "../state/auth-sagas";
 
 
 export const LoginPage = () => {
@@ -32,7 +32,7 @@ export const LoginPage = () => {
 
         }),
         onSubmit: (values) => {
-            dispatch(loginTC(values))
+            dispatch(login(values))
             formik.resetForm();
         },
     });

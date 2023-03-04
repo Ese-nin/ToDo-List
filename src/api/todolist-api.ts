@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {UpdateModelTaskType} from "../state/tasks-reducer";
 
 const instance = axios.create({
@@ -11,43 +11,43 @@ const instance = axios.create({
 
 
 export const todolistAPI = {
-    getTodolists() {
+    getTodolists(): Promise<AxiosResponse<TodolistDomainType[]>> {
         return instance.get<TodolistDomainType[]>('todo-lists')
     },
-    createTodolist(title: string) {
+    createTodolist(title: string): Promise<AxiosResponse<ResponseType<{ item: TodolistDomainType }>>> {
         return instance.post<ResponseType<{ item: TodolistDomainType }>>(`todo-lists`, {title})
     },
-    deleteTodolist(todolistID: string) {
+    deleteTodolist(todolistID: string): Promise<AxiosResponse<ResponseType>> {
         return instance.delete<ResponseType>(`todo-lists/${todolistID}`)
     },
-    changeTodolist(todolistID: string, title: string) {
+    changeTodolist(todolistID: string, title: string): Promise<AxiosResponse<ResponseType>> {
         return instance.put<ResponseType>(`todo-lists/${todolistID}`, {title})
     }
 }
 
 export const taskAPI = {
-    getTasks(todolistID: string) {
+    getTasks(todolistID: string): Promise<AxiosResponse<GetTasksResponseType>> {
         return instance.get<GetTasksResponseType>(`todo-lists/${todolistID}/tasks`)
     },
-    createTask(todolistID: string, title: string) {
+    createTask(todolistID: string, title: string): Promise<AxiosResponse<TaskResponseType<{ item: TaskDomainType }>>> {
         return instance.post<TaskResponseType<{ item: TaskDomainType }>>(`todo-lists/${todolistID}/tasks`, {title})
     },
-    deleteTask(todolistID: string, taskID: string) {
+    deleteTask(todolistID: string, taskID: string): Promise<AxiosResponse<TaskResponseType>> {
         return instance.delete<TaskResponseType>(`todo-lists/${todolistID}/tasks/${taskID}`)
     },
-    changeTask(todolistID: string, taskID: string, domainModel: UpdateModelTaskType) {
+    changeTask(todolistID: string, taskID: string, domainModel: UpdateModelTaskType): Promise<AxiosResponse<TaskResponseType<{ item: TaskDomainType }>>> {
         return instance.put<TaskResponseType<{ item: TaskDomainType }>>(`todo-lists/${todolistID}/tasks/${taskID}`, domainModel)
     }
 }
 
 export const authAPI = {
-    me() {
+    me(): Promise<AxiosResponse<ResponseType<IsAutorizedResponseType>>> {
         return instance.get<ResponseType<IsAutorizedResponseType>>('auth/me')
     },
-    login(data: DomainLoginModelType) {
+    login(data: DomainLoginModelType): Promise<AxiosResponse<ResponseType<{ userId: number }>>> {
         return instance.post<ResponseType<{ userId: number }>>('auth/login', data)
     },
-    logout() {
+    logout(): Promise<AxiosResponse<ResponseType>> {
         return instance.delete<ResponseType>('auth/login')
     }
 }
@@ -68,12 +68,12 @@ export type TaskDomainType = {
     order: number
     addedDate: string
 }
-type GetTasksResponseType = {
+export type GetTasksResponseType = {
     items: TaskDomainType[],
     totalCount: number,
     error: string
 }
-type TaskResponseType<T = {}> = {
+export type TaskResponseType<T = {}> = {
     resultCode: number,
     messages: string[],
     data: T

@@ -1,7 +1,4 @@
-import {ThunkAppDispatchType} from "../store/store";
-import {authAPI, IsAutorizedResponseType, ResponseCode} from "../api/todolist-api";
-import {SetIsLoggedInAC} from "./auth-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {initializeApp} from "./app-sagas";
 
 const InitState: AppInitStatePropsType = {
     appStatus: 'idle',
@@ -51,25 +48,6 @@ export const setInitializedAC = (isInitialized: boolean) => {
     } as const
 }
 
-// thunks
-
-export const initializeAppTC = () => (dispatch: ThunkAppDispatchType) => {
-    authAPI.me().then(res => {
-        if (res.data.resultCode === ResponseCode.SUCCESS) {
-            dispatch(SetIsLoggedInAC(true));
-        } else {
-            handleServerAppError<IsAutorizedResponseType>(res.data, dispatch)
-        }
-    })
-        .catch((err) => {
-            handleServerNetworkError(err, dispatch)
-        })
-        .finally(()=>{
-            dispatch(setInitializedAC(true))
-        })
-}
-
-
 // types
 export type AppStatusType = 'idle' | 'loading' | 'success' | 'failed'
 export type AppInitStatePropsType = {
@@ -81,7 +59,7 @@ export type AppInitStatePropsType = {
 
 export type AppReducerActionsType = ChangeAppStatusType
     | ChangeAppErrorType
-    | SetInitializedType
+    | SetInitializedType | ReturnType<typeof initializeApp>
 
 export type ChangeAppStatusType = ReturnType<typeof changeAppStatusAC>
 export type ChangeAppErrorType = ReturnType<typeof changeAppErrorAC>

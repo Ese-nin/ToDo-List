@@ -4,10 +4,9 @@ import {
     RemoveTodolistActionType,
     SetTodoActionType
 } from "./todolists-reducer";
-import {AppRootStateType, AppThunk} from "../store/store";
-import {AppStatusType, changeAppStatusAC} from "./app-reducer";
-import {ResponseCode, taskAPI, TaskDomainType} from "../api/todolist-api";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {AppStatusType} from "./app-reducer";
+import {TaskDomainType} from "../api/todolist-api";
+import {createTask, deleteTask, fetchTasks, updateTask} from "./tasks-sagas";
 
 export const tasksReducer = (state: TasksStateType = {}, action: TasksActionsType): TasksStateType => {
     switch (action.type) {
@@ -77,89 +76,6 @@ export const changeTaskEntityStatusAC = (todolistID: string, taskID: string, sta
     return {type: 'TASK/CHANGE_ENTITY_STATUS', todolistID, taskID, status} as const
 }
 
-
-// thunk
-export const SetTasksTC = (todolistID: string): AppThunk => (dispatch) => {
-    dispatch(changeAppStatusAC('loading'))
-    taskAPI.getTasks(todolistID)
-        .then((res) => {
-            dispatch(setTasksAC(todolistID, res.data.items))
-            dispatch(changeAppStatusAC('idle'))
-        })
-        .catch((err) => {
-            handleServerNetworkError(err, dispatch)
-        })
-}
-export const CreateTasksTC = (todolistID: string, title: string): AppThunk => (dispatch) => {
-    dispatch(changeAppStatusAC('loading'))
-    taskAPI.createTask(todolistID, title)
-        .then((res) => {
-            if (res.data.resultCode === ResponseCode.SUCCESS) {
-                dispatch(addTaskAC(res.data.data.item))
-                dispatch(changeAppStatusAC('idle'))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch((err) => {
-            handleServerNetworkError(err, dispatch)
-        })
-}
-export const DeleteTasksTC = (todolistID: string, taskID: string): AppThunk => (dispatch) => {
-    dispatch(changeAppStatusAC('loading'))
-    dispatch(changeTaskEntityStatusAC(todolistID, taskID, 'loading'))
-    taskAPI.deleteTask(todolistID, taskID)
-        .then((res) => {
-            if (res.data.resultCode === ResponseCode.SUCCESS) {
-                dispatch(removeTaskAC(todolistID, taskID))
-                dispatch(changeAppStatusAC('idle'))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch((err) => {
-            handleServerNetworkError(err, dispatch)
-        })
-        .finally(() => {
-            dispatch(changeTaskEntityStatusAC(todolistID, taskID, 'idle'))
-        })
-}
-export const UpdateTaskTC = (todolistID: string, taskID: string, domainModel: UpdateModelTaskType): AppThunk =>
-    (dispatch, getState: () => AppRootStateType) => {
-        dispatch(changeAppStatusAC('loading'))
-        dispatch(changeTaskEntityStatusAC(todolistID, taskID, 'loading'))
-        const task = getState().tasks[todolistID].find(t => t.id === taskID)
-
-        if (task) {
-            const model: UpdateModelTaskType = {
-                title: task.title,
-                startDate: task.startDate,
-                priority: task.priority,
-                description: task.description,
-                deadline: task.deadline,
-                status: task.status,
-                ...domainModel
-            }
-
-            taskAPI.changeTask(todolistID, taskID, model)
-                .then((res) => {
-                    if (res.data.resultCode === ResponseCode.SUCCESS) {
-                        dispatch(updateTaskAC(res.data.data.item))
-                        dispatch(changeAppStatusAC('idle'))
-                    } else {
-                        handleServerAppError(res.data, dispatch)
-                    }
-                })
-                .catch((err) => {
-                    handleServerNetworkError(err, dispatch)
-                })
-                .finally(() => {
-                    dispatch(changeTaskEntityStatusAC(todolistID, taskID, 'idle'))
-                })
-        }
-    }
-
-
 // types
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 export type AddTaskActionType = ReturnType<typeof addTaskAC>
@@ -176,6 +92,10 @@ export type TasksActionsType = RemoveTaskActionType
     | UpdateTasksACType
     | ChangeTaskEntityStatusActionType
     | ClearDataActionType
+    | ReturnType<typeof fetchTasks>
+    | ReturnType<typeof createTask>
+    | ReturnType<typeof deleteTask>
+    | ReturnType<typeof updateTask>
 
 export type TasksStateType = {
     [key: string]: TaskType[]
