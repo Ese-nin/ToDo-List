@@ -11,14 +11,14 @@ import {
     Typography
 } from "@mui/material";
 import {Menu} from "@mui/icons-material";
-import {TodoListsList} from "./components/TodoListsList";
-import {ErrorAlert} from "./components/ErrorAlert";
-import {useAppDispatch, useAppSelector} from "./store/store";
+import {TodoListsList} from "components/TodoListsList";
+import {ErrorAlert} from "components/ErrorAlert";
+import {useAppDispatch, useAppSelector} from "store/store";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {LoginPage} from "./components/Login";
-import {initializeApp} from "./state/app-reducer";
-import {logOut} from "./state/auth-reducer";
-import {appStatusSelector, isInitializedSelector, isLoggedInSelector} from "./state/selectors";
+import {LoginPage} from "components/Login";
+import {initializeApp} from "state/app-reducer";
+import {logOut} from "state/auth-reducer";
+import {appStatusSelector, isInitializedSelector, isLoggedInSelector} from "state/selectors";
 
 function App() {
 
@@ -28,7 +28,7 @@ function App() {
 
     const dispatch = useAppDispatch()
 
-    useEffect(()=>{
+    useEffect(() => {
         if (isInitialized) {
             return
         }
@@ -60,7 +60,7 @@ function App() {
                     </Typography>
                     {isLoggedIn && <Button onClick={logoutHandler} color="inherit">Log out</Button>}
                 </Toolbar>
-                {appStatus === 'loading' && <LinearProgress />}
+                {appStatus === 'loading' && <LinearProgress/>}
             </AppBar>
             <Container fixed>
                 <Routes>

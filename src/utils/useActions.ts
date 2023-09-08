@@ -1,4 +1,4 @@
-import {useAppDispatch} from "../store/store";
+import {useAppDispatch} from "store/store";
 import {useMemo} from "react";
 import {ActionCreatorsMapObject, bindActionCreators} from "redux";
 
